@@ -1,0 +1,91 @@
+body {
+    background-color: black;
+    background-size: cover;
+    padding:0;
+    margin:0;
+    width: 100%;
+    height: 100%;
+}
+
+.sideMenu {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    width: 15%;
+    height: 100%;
+    background-color: rgb(190, 190, 190);
+
+    padding: 10px;
+    left: 85%;
+
+}
+
+
+#submit {
+    padding: 20px;
+    margin: 20px;
+    background-color: rgb(240, 240, 240);
+    font-family: Arial;
+    font-size: 30px;
+    border-radius: 10px;
+    color: rgb(34, 34, 34);
+}
+
+p {
+    font-family: Arial;
+    font-size: 18px;
+    color: black;
+    font-style: italic;
+}
+
+input[type=text] {
+
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-family: Arial;
+    color: rgb(19, 19, 19);
+}
+
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #dd6b61;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    border: 1px solid #ccc;
+    border-top: none;
+    height: 80%;
+}
+
+#map {
+    width: 1200;
+    height: 750;
+    border: 2px solid rgb(206, 25, 25);
+    position: absolute;
+}
