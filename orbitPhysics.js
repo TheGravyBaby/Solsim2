@@ -1,5 +1,6 @@
 var minutes = 0;
 var runOrbits = false;
+var hasRun = false;
 
 var dummy_array = [
     {
@@ -73,10 +74,12 @@ var dummy_array = [
 
 function startStop() {
     var timer;
+    var render;
 
     if(runOrbits) {
         runOrbits = false;
-        clearInterval(timer);
+        timer.pause();
+        render.pause();
         console.log("STOPPED")
      }
 
@@ -84,18 +87,24 @@ function startStop() {
         console.log("START")
         runOrbits = true;
         startMotion(dummy_array)
-        setInterval(function(){renderObjects(dummy_array)}, 33);
-
-        timer = setInterval(function(){ 
-            //to make sure calculation timing is in line, really pushing the JS stack here to its limit
-            //also use a trick here to force JS to do more calculations than the 1ms interval will allow
-            // var t0 = performance.now()
-            for (var i = 0; i < 10; i++) {
-                startMotion(dummy_array)
-            } 
-            // var t1 = performance.now()
-            // console.log("Call to move took " + (t1 - t0) + " milliseconds.")            
-        }, 3);             
+        if (!hasRun) {
+            hasRun = true;
+            render = setInterval(function(){renderObjects(dummy_array)}, 33);
+            timer = setInterval(function(){ 
+                //to make sure calculation timing is in line, really pushing the JS stack here to its limit
+                //also use a trick here to force JS to do more calculations than the 1ms interval will allow
+                // var t0 = performance.now()
+                for (var i = 0; i < 10; i++) {
+                    startMotion(dummy_array)
+                } 
+                // var t1 = performance.now()
+                // console.log("Call to move took " + (t1 - t0) + " milliseconds.")            
+            }, 3);             
+        }
+       else {
+        timer.resume();
+        render.resume();
+       }
      }
 }
 
@@ -108,7 +117,7 @@ function startMotion(body_array) {
 
 function moveBodies(body_array) {
     //console.log(body_array[0])
-    console.log(body_array)
+    //console.log(body_array)
     var allForces = sumForces(body_array);
 
     for (let i = 0; i < body_array.length; i++) {
