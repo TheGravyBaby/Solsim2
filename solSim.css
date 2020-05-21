@@ -9,6 +9,14 @@ body {
 
 text {
     color: rgb(160, 160, 160);
+    font-size: small;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
 .planet {
     cursor: pointer;
@@ -16,11 +24,9 @@ text {
 
 line {
     stroke: rgb(31, 31, 31);
-
 }
 
 .sideMenu {
-
     position: fixed;
     width: 16%;
     height: 100%;

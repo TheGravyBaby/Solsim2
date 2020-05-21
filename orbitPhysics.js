@@ -31,7 +31,7 @@ var solArray = [
         "x": -69816900 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
         "y": 0,                                                                  //meters 
         "dx": 0,
-        "dy": -47.362 * 1000,                                                        //velocity in m/s assuming the earth starts at 0
+        "dy": -48.362 * 1000,                                                        //velocity in m/s assuming the earth starts at 0
         "mass": 3.3011 * Math.pow(10, 23),                                           //kg
     },
 
@@ -64,7 +64,7 @@ var solArray = [
         "x": 1.47098074 * Math.pow(10, 11) + 384748 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
         "y": 0,
         "dx":0,
-        "dy": 30.28 * 1000 + 1122,                                                 //fudged a little to make it work
+        "dy": 30.28 * 1000 + 1180,                                                 //fudged a little to make it work
         "mass": 7.35 * Math.pow(10, 22),                                           //kg
     },
 
@@ -305,6 +305,10 @@ function updatePosition(Fx, Fy, body, dt) {
 
 function renderObjects(body_array) {
 
+    if (focusing == true) {
+        focusBody();
+    }
+
     var width = 1600
     var height = 1000
 
@@ -327,55 +331,58 @@ function renderObjects(body_array) {
         .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
         .range([height - yMargin, yMargin]);
 
-    // gridlines in x axis function
-    function make_x_gridlines() {		
-        return d3.axisBottom(x)
-            .ticks(16)       
-    }
 
-    // gridlines in y axis function
-    function make_y_gridlines() {		
-        return d3.axisLeft(y)
-            .ticks(10)
-    }
+    if (gridOn) {
+        // gridlines in x axis function
+        function make_x_gridlines() {		
+            return d3.axisBottom(x)
+                .ticks(16)       
+        }
 
-    // add the X gridlines
-    svg.append("g")			
-        .attr("class", "grid")
-        .attr("transform", "translate(0," + (height - yMargin) + ")")
-        .call(make_x_gridlines()
-        .tickSize(-920)
-        .tickFormat("")
-        )
+        // gridlines in y axis function
+        function make_y_gridlines() {		
+            return d3.axisLeft(y)
+                .ticks(10)
+        }
 
-    // add the Y gridlines
-    svg.append("g")			
-        .attr("class", "grid")
-        .attr("transform", "translate(" + (xMargin) + ")")
-        .call(make_y_gridlines()
-        .tickSize(-1472)
-        .tickFormat(""))
+        // add the X gridlines
+        svg.append("g")			
+            .attr("class", "grid")
+            .attr("transform", "translate(0," + (height) + ")")
+            .call(make_x_gridlines()
+            .tickSize(-height)
+            .tickFormat("")
+            )
 
-    // Add scales to axis
-    var xAxis = d3.axisBottom(x).ticks(8)
-                .tickFormat(function (d) {
-                    return d / 1000000000 +"Gm";
-                });
+        // add the Y gridlines
+        svg.append("g")			
+            .attr("class", "grid")
+            .call(make_y_gridlines()
+            .tickSize(-width)
+            .tickFormat(""))
+
+        // Add scales to axis
+        var xAxis = d3.axisBottom(x).ticks(16)
+                    .tickFormat(function (d) {
+                        return d / 1000000000 +"Gm";
+                    });
 
 
-    var yAxis = d3.axisRight(y).ticks(5)
-                .tickFormat(function (d) {
-                    return d / 1000000000 +"Gm";
-                });
-    
-	svg.append("g")
-        //.attr("transform", `translate(${height - 40}, 40)`)
-        .call(yAxis);
+        var yAxis = d3.axisRight(y).ticks(10)
+                    .tickFormat(function (d) {
+                        return d / 1000000000 +"Gm";
+                    });
         
+        svg.append("g")
+            //.attr("transform", `translate(${height - 40}, 40)`)
+            .call(yAxis);
+            
 
-    svg.append("g")
-        //.attr("transform", `translate(40, ${width - 40})`)
-        .call(xAxis);
+        svg.append("g")
+            //.attr("transform", `translate(40, ${width - 40})`)
+            .call(xAxis);
+    }
+    
 
     var circles = svg.selectAll("foo")
     .data(body_array)
@@ -391,29 +398,6 @@ function renderObjects(body_array) {
 
     document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( minutes / 288 ) } </p>`
 
-}
-
-document.addEventListener('wheel', function(e) {
-    e.preventDefault();
-    zoom(e);
-}, { passive: false });
-
-function zoom(event) {
-    
-    if (event.deltaY < 0 && scale >= 200) {
-        scale =  scale + (event.deltaY );
-        console.log("ZOOM IN")
-        console.log(scale) 
-    }  
-    if (event.deltaY > 0 && scale <= 10100) {
-        scale =  scale + (event.deltaY);
-        console.log("ZOOM OUT")
-        
-        console.log(scale) 
-    }
-    else {
-        console.log("Scale limit reached")
-    }
 }
 
 //allows panning of the map
@@ -437,7 +421,7 @@ viewer.addEventListener('mousemove', e => {
         yPos = e.offsetY;
         xOffset += (xPos - xPosOld)
         yOffset += (yPos - yPosOld)
-        //console.log("Dragging Offset (" + xOffset  + ", "+ yOffset  + ")")
+        console.log("Dragging Offset (" + xOffset  + ", "+ yOffset  + ")")
         //console.log(e)
         xPosOld = e.offsetX;
         yPosOld = e.offsetY;
@@ -458,14 +442,65 @@ viewer.addEventListener('mousemove', e => {
     }
   });
 
-// viewer.addEventListener('dblclick', e => {
-//         console.log("Double Clickerusky!")
-//         xOffset = 0;
-//         yOffset = 0;
-// })
+  
+document.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    zoom(e);
+}, { passive: false });
+
+function zoom(event) {
+    
+    if (event.deltaY < 0 && scale >= 11) {
+        scale =  scale + (event.deltaY / 10);
+    }  
+
+    if (event.deltaY < 0 && scale >= 200) {
+        scale =  scale + (event.deltaY);
+        
+    }  
+    if (event.deltaY > 0 && scale <= 10100) {
+        scale =  scale + (event.deltaY);
+
+ 
+    }
+}
 
 renderObjects(solArray);
 
-function focusBody() {
+var focusing = false;
+function focusButton() {
+    if (!focusing) {
+        focusing = true;
+        focusBody()
+    }
 
+    else {
+        focusing = false;
+    }
+}
+
+function focusBody() {
+    var body = $('#bodyList').prop('selectedIndex')
+
+    xOffset = -1 * solArray[body].x / (scale * Math.pow(10, 6))
+    yOffset = solArray[body].y / (scale * Math.pow(10, 6))
+    console.log(xOffset)
+}
+
+function centerCamera() {
+    xOffset = 0;
+    yOffset = 0;
+    scale = 4500;
+    focusing = false;
+
+}
+
+var gridOn = true;
+function toggleGrid () {
+    if (!gridOn) {
+        gridOn = true;
+    }
+    else {
+        gridOn = false;
+    }
 }
