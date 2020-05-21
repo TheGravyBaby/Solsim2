@@ -1,9 +1,9 @@
 var minutes = 0;
 var runOrbits = false;
 var hasRun = false;
-var dummy_array = [
+var solArray = [
     {
-        "name": "sun",
+        "name": "Sun",
         "size": 10,
         "color": "orange",
         "x": 0,                                                                 //earths m from the sun at aphelion
@@ -13,19 +13,30 @@ var dummy_array = [
         "mass": 1.989 * Math.pow(10, 30),                                       //kg
     },
 
+    // {
+    //     "name": "sun2",
+    //     "size": 10,
+    //     "color": "orange",
+    //     "x": -1 * 1.47098074 * Math.pow(10, 11)  * 3,                                                              //earths m from the sun at aphelion
+    //     "y": 0,
+    //     "dx":0,
+    //     "dy": - .5 * 15000,                                                                        //velocity in m/s assuming the earth starts at 0
+    //     "mass": 1.989 * Math.pow(10, 30),                                               //kg
+    // },
+
     {
-        "name": "mercury",
+        "name": "Mercury",
         "size": 4,
         "color": "grey",
         "x": -69816900 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
-        "y": 0,                //meters 
+        "y": 0,                                                                  //meters 
         "dx": 0,
         "dy": -47.362 * 1000,                                                        //velocity in m/s assuming the earth starts at 0
         "mass": 3.3011 * Math.pow(10, 23),                                           //kg
     },
 
     {
-        "name": "venus",
+        "name": "Venus",
         "size": 4,
         "color": "sandybrown",
         "x": 0,                                        //earths m from the sun at aphehedron
@@ -36,7 +47,7 @@ var dummy_array = [
     },
 
     {
-        "name": "earth",
+        "name": "Earth",
         "size": 5,
         "color": "lightblue",
         "x": 1.47098074 * Math.pow(10, 11),                                        //earths m from the sun at aphehedron
@@ -46,8 +57,20 @@ var dummy_array = [
         "mass": 5.92 * Math.pow(10, 24),                                           //kg
     },
 
+    //too hard to see at these massive scales
+    // {
+    //     "name": "moon",
+    //     "size": 2,
+    //     "color": "grey",
+    //     "x": 1.47098074 * Math.pow(10, 11) + 384748 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
+    //     "y": 0,
+    //     "dx":0,
+    //     "dy": 30.28 * 1000 + 1022,                                                        //velocity in m/s assuming the earth starts at 0
+    //     "mass": 7.35 * Math.pow(10, 22),                                           //kg
+    // },
+
     {
-        "name": "mars",
+        "name": "Mars",
         "size": 4,
         "color": "red",
         "x": 0,                                                                     //earths m from the sun at aphehedron
@@ -58,7 +81,7 @@ var dummy_array = [
     },
 
     {
-        "name": "jupiter",
+        "name": "Jupiter",
         "size": 7,
         "color": "brown",
         "x": 0,                                                                  //earths m from the sun at aphehedron
@@ -69,7 +92,7 @@ var dummy_array = [
     },
 
     {
-        "name": "saturn",
+        "name": "Saturn",
         "size": 6,
         "color": "DARKSALMON",
         "x": 1352.55 * Math.pow(10, 9),                                        //earths m from the sun at aphehedron
@@ -80,7 +103,7 @@ var dummy_array = [
     },
 
     {
-        "name": "uranus",
+        "name": "Uranus",
         "size": 5,
         "color": "lightblue",
         "x": -1 * 2742 * Math.pow(10, 9),                                        //earths m from the sun at aphehedron
@@ -91,7 +114,7 @@ var dummy_array = [
     },
 
     {
-        "name": "neptune",
+        "name": "Neptune",
         "size": 5,
         "color": "blue",
         "x": 4460 * Math.pow(10, 9),                                        //earths m from the sun at aphehedron
@@ -102,32 +125,116 @@ var dummy_array = [
     },
 
 ];
+var scale = 4500;
+
+render = setInterval(function(){renderObjects(solArray)}, 33);
+updateFields = setInterval(function(){dataUpdater()}, 500);
+
+function populateBodyList() { 
+    $('#bodyList').empty()
+    solArray.forEach(element => {
+        $('#bodyList')
+        .append($("<option></option>")
+                   .attr("value", element.name)
+                   .text(element.name));
+    }); 
+}
+populateBodyList()
+
+function populateTable() {
+    var body = $('#bodyList').prop('selectedIndex')
+
+    $('#bodyName').empty().append(solArray[body].name)
+    $('#bodyRadius').empty().append(solArray[body].size)
+    $('#bodyMass').empty().append(solArray[body].mass)
+    $('#bodyColor').empty().append(solArray[body].color)
+    $('#bodyX').empty().append(solArray[body].x)
+    $('#bodyY').empty().append(solArray[body].y)
+    $('#bodydX').empty().append(solArray[body].dx)
+    $('#bodydY').empty().append(solArray[body].dy)
+}
+populateTable()
+
+function updateSystem() {
+    var body = $('#bodyList').prop('selectedIndex')
+
+    var name = $('#bodyName').val()
+
+    solArray[body].name = name;
+    solArray[body].size = $('#bodyRadius').val();
+    solArray[body].mass = Number($('#bodyMass').val())
+    solArray[body].color = $('#bodyColor').val();
+    solArray[body].x = Number($('#bodyX').val());
+    solArray[body].y = Number($('#bodyY').val());
+    solArray[body].dx = Number($('#bodydX').val());
+    solArray[body].dy = Number($('#bodydY').val());
+
+    populateBodyList()
+    $("#bodyList").val(name)
+}
+
+function addBody() {
+    
+    solArray.push(
+        {
+            "name": "NewPlanet",
+            "size": 5,
+            "color": "green",
+            "x": 249200000 * Math.pow(10, 3),                                                                 //earths m from the sun at aphelion
+            "y": 249200000 * Math.pow(10, 3),
+            "dx": -9.68 * 1000,
+            "dy": 9.68 * 1000,                                                                //velocity in m/s assuming the earth starts at 0
+            "mass": 5.92 * Math.pow(10, 24),                                       //kg
+        }
+    )
+    populateBodyList();
+    $("#bodyList").val("NewPlanet")
+    populateTable();
+    console.log(solArray)
+}
+
+function deleteBody() {
+    // clearInterval(render)
+    // clearInterval(updateFields)
+    
+    var body = $('#bodyList').prop('selectedIndex')
+    solArray.splice(body, 1)
+    
+    console.log(solArray)
+    populateBodyList();
+}
 
 function startStop() {
     if(runOrbits) {
         runOrbits = false;
+        populateTable()
         console.log("STOPPED")
      }
 
      else {
         console.log("START")
         runOrbits = true;
-        startMotion(dummy_array)
+        startMotion(solArray)
         if (!hasRun) {
             hasRun = true;
-            render = setInterval(function(){renderObjects(dummy_array)}, 33);
             timer = setInterval(function(){ 
                 //to make sure calculation timing is in line, really pushing the JS stack here to its limit
                 //also use a trick here to force JS to do more calculations than the 1ms interval will allow
                 // var t0 = performance.now()
-                for (var i = 0; i < 20; i++) {
-                    startMotion(dummy_array)
+                for (var i = 0; i < 50; i++) {
+                    startMotion(solArray)
                 } 
                 // var t1 = performance.now()
                 // console.log("Call to move took " + (t1 - t0) + " milliseconds.")            
-            }, 5);             
+            }, 5);
         }
      }
+}
+
+function dataUpdater() {
+    if(runOrbits) {
+        populateTable()
+    }
 }
 
 function startMotion(body_array) {
@@ -203,18 +310,18 @@ function renderObjects(body_array) {
     var height = 875
     d3.select("#map").selectAll("svg").remove();
 
-    var mapScale = 4500 * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
+    var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
 
     var svg = d3.select("#map").append("svg")
         .attr("width", width)
         .attr("height", height);
 
     var x = d3.scaleLinear()
-        .domain([-mapScale, mapScale])
+        .domain([-mapScale - xOffset * scale * Math.pow(10, 6) , mapScale - xOffset * scale * Math.pow(10, 6)])
         .range([0, width]);
 
     var y = d3.scaleLinear()
-        .domain([.625 * -mapScale, .624 * mapScale])
+        .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .624 * mapScale + yOffset * scale * Math.pow(10, 6)])
         .range([height, 0]);
 
     var circles = svg.selectAll("foo")
@@ -230,6 +337,75 @@ function renderObjects(body_array) {
     document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( minutes / 288 ) } </p>`
 }
 
-function panZoom() {
+document.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    zoom(e);
+}, { passive: false });
 
+function zoom(event) {
+    
+    if (event.deltaY < 0 && scale >= 201) {
+        scale =  scale + (event.deltaY * 2);
+        console.log("ZOOM IN")
+        console.log(scale) 
+    }  
+    if (event.deltaY > 0 && scale <= 10000) {
+        scale =  scale + (event.deltaY * 3);
+        console.log("ZOOM OUT")
+        
+        console.log(scale) 
+    }
+    else {
+        console.log("Scale limit reached")
+    }
 }
+
+//allows panning of the map
+var xOffset = 0;
+var yOffset = 0;
+
+var xPos = null;
+var xPosOld = null;
+var yPos = null;
+var yPosOld = null;
+let isPanning = false;
+const viewer = document.getElementById('map');
+
+viewer.addEventListener('mousedown', e => {
+    isPanning = true;
+  });
+
+viewer.addEventListener('mousemove', e => {
+    if (isPanning === true && xPosOld != null) {
+        xPos = e.offsetX ;
+        yPos = e.offsetY;
+        xOffset += (xPos - xPosOld)
+        yOffset += (yPos - yPosOld)
+        //console.log("Dragging Offset (" + xOffset  + ", "+ yOffset  + ")")
+        //console.log(e)
+        xPosOld = e.offsetX;
+        yPosOld = e.offsetY;
+    }
+    else {
+        xPosOld = e.offsetX;
+        yPosOld = e.offsetY;
+    }
+  });
+
+  viewer.addEventListener('mouseup', e => {
+    if (isPanning === true) {
+        isPanning = false; 
+        xPos = null;
+        xPosOld = null;
+        yPos = null;
+        yPosOld = null;
+    }
+  });
+
+// viewer.addEventListener('dblclick', e => {
+//         console.log("Double Clickerusky!")
+//         xOffset = 0;
+//         yOffset = 0;
+// })
+
+renderObjects(solArray);
