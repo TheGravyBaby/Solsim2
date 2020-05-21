@@ -26,7 +26,7 @@ var solArray = [
 
     {
         "name": "Mercury",
-        "size": 4,
+        "size": 3,
         "color": "grey",
         "x": -69816900 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
         "y": 0,                                                                  //meters 
@@ -57,16 +57,16 @@ var solArray = [
         "mass": 5.92 * Math.pow(10, 24),                                           //kg
     },
 
-    {
-        "name": "Moon",
-        "size": 2,
-        "color": "grey",
-        "x": 1.47098074 * Math.pow(10, 11) + 384748 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
-        "y": 0,
-        "dx":0,
-        "dy": 30.28 * 1000 + 1180,                                                 //fudged a little to make it work
-        "mass": 7.35 * Math.pow(10, 22),                                           //kg
-    },
+    // {
+    //     "name": "Moon",
+    //     "size": 2,
+    //     "color": "grey",
+    //     "x": 1.47098074 * Math.pow(10, 11) + 384748 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
+    //     "y": 0,
+    //     "dx":0,
+    //     "dy": 30.28 * 1000 + 1180,                                                 //fudged a little to make it work
+    //     "mass": 7.35 * Math.pow(10, 22),                                           //kg
+    // },
 
     {
         "name": "Mars",
@@ -219,13 +219,13 @@ function startStop() {
             timer = setInterval(function(){ 
                 //to make sure calculation timing is in line, really pushing the JS stack here to its limit
                 //also use a trick here to force JS to do more calculations than the 1ms interval will allow
-                // var t0 = performance.now()
-                for (var i = 0; i < 50; i++) {
+                //var t0 = performance.now()
+                for (var i = 0; i < 500; i++) {
                     startMotion(solArray)
                 } 
                 // var t1 = performance.now()
                 // console.log("Call to move took " + (t1 - t0) + " milliseconds.")            
-            }, 5);
+            }, 25);
         }
      }
 }
@@ -239,7 +239,7 @@ function dataUpdater() {
 function startMotion(body_array) {
     if(runOrbits) {
         moveBodies(body_array)
-        minutes += 1
+        minutes += 5
     }
 }
 
@@ -311,13 +311,11 @@ function renderObjects(body_array) {
 
     var width = 1600
     var height = 1000
-
     var xMargin = 64;
     var yMargin = 40;
+    var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
 
     d3.select("#map").selectAll("svg").remove();
-
-    var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
 
     var svg = d3.select("#map").append("svg")
         .attr("width", width)
@@ -330,7 +328,6 @@ function renderObjects(body_array) {
     var y = d3.scaleLinear()
         .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
         .range([height - yMargin, yMargin]);
-
 
     if (gridOn) {
         // gridlines in x axis function
@@ -376,13 +373,11 @@ function renderObjects(body_array) {
         svg.append("g")
             //.attr("transform", `translate(${height - 40}, 40)`)
             .call(yAxis);
-            
 
         svg.append("g")
             //.attr("transform", `translate(40, ${width - 40})`)
             .call(xAxis);
     }
-    
 
     var circles = svg.selectAll("foo")
     .data(body_array)
@@ -396,8 +391,7 @@ function renderObjects(body_array) {
         .attr("id", function(d) { return (d.name);})
         .attr("class", "planet")
 
-    document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( minutes / 288 ) } </p>`
-
+    document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( minutes / 1440 ) } </p><p style="{color: "white";}"> Total Years: ${Math.floor( (minutes / 525600 ) ) } </p>`
 }
 
 //allows panning of the map
@@ -460,8 +454,6 @@ function zoom(event) {
     }  
     if (event.deltaY > 0 && scale <= 10100) {
         scale =  scale + (event.deltaY);
-
- 
     }
 }
 
@@ -473,7 +465,6 @@ function focusButton() {
         focusing = true;
         focusBody()
     }
-
     else {
         focusing = false;
     }
@@ -484,7 +475,6 @@ function focusBody() {
 
     xOffset = -1 * solArray[body].x / (scale * Math.pow(10, 6))
     yOffset = solArray[body].y / (scale * Math.pow(10, 6))
-    console.log(xOffset)
 }
 
 function centerCamera() {
@@ -492,7 +482,6 @@ function centerCamera() {
     yOffset = 0;
     scale = 4500;
     focusing = false;
-
 }
 
 var gridOn = true;
