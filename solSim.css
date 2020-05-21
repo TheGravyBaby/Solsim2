@@ -1,5 +1,5 @@
 body {
-    background-color: black;
+    background-color: rgb(0, 0, 0);
     background-size: cover;
     padding:0;
     margin:0;
@@ -7,16 +7,45 @@ body {
     height: 100%;
 }
 
+text {
+    color: rgb(160, 160, 160);
+}
+.planet {
+    cursor: pointer;
+}
+
+line {
+    stroke: rgb(31, 31, 31);
+
+}
+
 .sideMenu {
-    display: flex;
-    flex-direction: column;
+
     position: fixed;
-    width: 25%;
+    width: 16%;
     height: 100%;
     background-color: rgb(190, 190, 190);
-
+    text-align: center;
     padding: 10px;
-    left: 74%;
+    left: 83.5%;
+}
+
+
+.textbox {
+    border-color: rgb(22, 22, 22);
+    border-width: 1px;
+    width: 180px;
+    height: 16px;
+    resize: none;
+}
+
+
+.listBox {
+    position: relative;
+    width: 250px;
+    color: rgb(22, 22, 22);
+    border-color: rgb(22, 22, 22);
+    border-width: 1px;
 }
 
 .formbutton {
@@ -35,24 +64,7 @@ body {
     margin: 4px 2px;
     cursor: pointer;
     font-weight: bold;
-    width: 140px;
-}
-
-.textbox {
-    border-color: rgb(22, 22, 22);
-    border-width: 1px;
-    width: 200px;
-    resize: none;
-}
-
-
-.listBox {
-    position: relative;
-    bottom: 0;
-    height: 60px;
-    color: rgb(22, 22, 22);
-    border-color: rgb(22, 22, 22);
-    border-width: 1px;
+    width: 120px;
 }
 
 .formbuttonbig {
@@ -80,19 +92,15 @@ p {
 }
 
 #map {
-    width: 1200;
-    height: 750;
-    border: 2px solid rgb(206, 25, 25);
     position: absolute;
     touch-action: none;
     cursor: move;
 }
 
 table {
-    border-collapse: collapse;
     position: relative;
     padding: 20px;
-    text-align: right;
+    text-align: left;
 }
 
 th, td {

@@ -9,16 +9,17 @@
 <body>
 <div id="map"></div>
 <div class = "sideMenu">
-    <h3>Welcome to Sol Sim!</h3>
+    <h2>Welcome to Sol Sim!</h2>
 
-    <label for="bodyList" >Select a Body:</label>
-    <select id="bodyList" label="Body List" class = "listbox" onchange="populateTable()"></select>
+    <label for="bodyList"><b>Select a Body</b></label><br>
+    <select id="bodyList" label="Body List" class = "listBox" onchange="populateTable()"></select><br><br>
 
     <button id="addPlanet" class="formbutton" onclick="addBody()">Add Body</button>
     <button id="removePlanet" class="formbutton" onclick="deleteBody()">Remove Body</button>
     <button id="updateBody" class="formbutton" onclick="updateSystem()">Update Body</button>
+    <!-- <button id="focusBody" class="formbutton" onclick="focusBody()">Focus Body</button> -->
     
-    <br>
+    <br><br>
 
     <table id="propertiesTable">
         <tr>

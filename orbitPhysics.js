@@ -57,17 +57,16 @@ var solArray = [
         "mass": 5.92 * Math.pow(10, 24),                                           //kg
     },
 
-    //too hard to see at these massive scales
-    // {
-    //     "name": "moon",
-    //     "size": 2,
-    //     "color": "grey",
-    //     "x": 1.47098074 * Math.pow(10, 11) + 384748 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
-    //     "y": 0,
-    //     "dx":0,
-    //     "dy": 30.28 * 1000 + 1022,                                                        //velocity in m/s assuming the earth starts at 0
-    //     "mass": 7.35 * Math.pow(10, 22),                                           //kg
-    // },
+    {
+        "name": "Moon",
+        "size": 2,
+        "color": "grey",
+        "x": 1.47098074 * Math.pow(10, 11) + 384748 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
+        "y": 0,
+        "dx":0,
+        "dy": 30.28 * 1000 + 1122,                                                 //fudged a little to make it work
+        "mass": 7.35 * Math.pow(10, 22),                                           //kg
+    },
 
     {
         "name": "Mars",
@@ -160,7 +159,7 @@ function updateSystem() {
 
     var name = $('#bodyName').val()
 
-    solArray[body].name = name;
+    solArray[body].name = $('#bodyName').val();
     solArray[body].size = $('#bodyRadius').val();
     solArray[body].mass = Number($('#bodyMass').val())
     solArray[body].color = $('#bodyColor').val();
@@ -178,8 +177,8 @@ function addBody() {
     solArray.push(
         {
             "name": "NewPlanet",
-            "size": 5,
-            "color": "green",
+            "size": 4,
+            "color": "grey",
             "x": 249200000 * Math.pow(10, 3),                                                                 //earths m from the sun at aphelion
             "y": 249200000 * Math.pow(10, 3),
             "dx": -9.68 * 1000,
@@ -306,8 +305,12 @@ function updatePosition(Fx, Fy, body, dt) {
 
 function renderObjects(body_array) {
 
-    var width = 1400
-    var height = 875
+    var width = 1600
+    var height = 1000
+
+    var xMargin = 64;
+    var yMargin = 40;
+
     d3.select("#map").selectAll("svg").remove();
 
     var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
@@ -318,23 +321,76 @@ function renderObjects(body_array) {
 
     var x = d3.scaleLinear()
         .domain([-mapScale - xOffset * scale * Math.pow(10, 6) , mapScale - xOffset * scale * Math.pow(10, 6)])
-        .range([0, width]);
+        .range([xMargin, width - xMargin]);
 
     var y = d3.scaleLinear()
-        .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .624 * mapScale + yOffset * scale * Math.pow(10, 6)])
-        .range([height, 0]);
+        .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
+        .range([height - yMargin, yMargin]);
+
+    // gridlines in x axis function
+    function make_x_gridlines() {		
+        return d3.axisBottom(x)
+            .ticks(16)       
+    }
+
+    // gridlines in y axis function
+    function make_y_gridlines() {		
+        return d3.axisLeft(y)
+            .ticks(10)
+    }
+
+    // add the X gridlines
+    svg.append("g")			
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + (height - yMargin) + ")")
+        .call(make_x_gridlines()
+        .tickSize(-920)
+        .tickFormat("")
+        )
+
+    // add the Y gridlines
+    svg.append("g")			
+        .attr("class", "grid")
+        .attr("transform", "translate(" + (xMargin) + ")")
+        .call(make_y_gridlines()
+        .tickSize(-1472)
+        .tickFormat(""))
+
+    // Add scales to axis
+    var xAxis = d3.axisBottom(x).ticks(8)
+                .tickFormat(function (d) {
+                    return d / 1000000000 +"Gm";
+                });
+
+
+    var yAxis = d3.axisRight(y).ticks(5)
+                .tickFormat(function (d) {
+                    return d / 1000000000 +"Gm";
+                });
+    
+	svg.append("g")
+        //.attr("transform", `translate(${height - 40}, 40)`)
+        .call(yAxis);
+        
+
+    svg.append("g")
+        //.attr("transform", `translate(40, ${width - 40})`)
+        .call(xAxis);
 
     var circles = svg.selectAll("foo")
-        .data(body_array)
-        .enter()
-        .append("circle")
+    .data(body_array)
+    .enter()
+    .append("circle")
         
     circles.attr("cx", function(d) { return x(d.x);})
         .attr("cy", function(d) { return y(d.y);})
         .attr("r", function(d) { return (d.size);})
         .attr("fill", function(d) { return (d.color);})
+        .attr("id", function(d) { return (d.name);})
+        .attr("class", "planet")
 
     document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( minutes / 288 ) } </p>`
+
 }
 
 document.addEventListener('wheel', function(e) {
@@ -344,13 +400,13 @@ document.addEventListener('wheel', function(e) {
 
 function zoom(event) {
     
-    if (event.deltaY < 0 && scale >= 201) {
-        scale =  scale + (event.deltaY * 2);
+    if (event.deltaY < 0 && scale >= 200) {
+        scale =  scale + (event.deltaY );
         console.log("ZOOM IN")
         console.log(scale) 
     }  
-    if (event.deltaY > 0 && scale <= 10000) {
-        scale =  scale + (event.deltaY * 3);
+    if (event.deltaY > 0 && scale <= 10100) {
+        scale =  scale + (event.deltaY);
         console.log("ZOOM OUT")
         
         console.log(scale) 
@@ -409,3 +465,7 @@ viewer.addEventListener('mousemove', e => {
 // })
 
 renderObjects(solArray);
+
+function focusBody() {
+
+}
