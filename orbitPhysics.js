@@ -1,126 +1,122 @@
 var minutes = 0;
 var runOrbits = false;
 var hasRun = false;
+
+//positions will be updated with nasa data
 var solArray = [
     {
         "name": "Sun",
         "size": 10,
         "color": "orange",
-        "x": 0,                                                                 //earths m from the sun at aphelion
+        "x": 0,                                                                 
         "y": 0,
         "dx":0,
-        "dy": 0,                                                                //velocity in m/s assuming the earth starts at 0
-        "mass": 1.989 * Math.pow(10, 30),                                       //kg
+        "dy": 0,                                                                
+        "mass": 1.985 * Math.pow(10, 30),                                       
     },
-
-    // {
-    //     "name": "sun2",
-    //     "size": 10,
-    //     "color": "orange",
-    //     "x": -1 * 1.47098074 * Math.pow(10, 11)  * 3,                                                              //earths m from the sun at aphelion
-    //     "y": 0,
-    //     "dx":0,
-    //     "dy": - .5 * 15000,                                                                        //velocity in m/s assuming the earth starts at 0
-    //     "mass": 1.989 * Math.pow(10, 30),                                               //kg
-    // },
 
     {
         "name": "Mercury",
         "size": 3,
         "color": "grey",
-        "x": -69816900 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
-        "y": 0,                                                                  //meters 
-        "dx": 0,
-        "dy": -48.362 * 1000,                                                        //velocity in m/s assuming the earth starts at 0
-        "mass": 3.3011 * Math.pow(10, 23),                                           //kg
+        "x": (-5.861734219855962 * Math.pow(10, 7) * 1000),                                        
+        "y": -2.012988097831650 * Math.pow(10, 7) * 1000,
+        "z": 3.732297677176796 * Math.pow(10, 6) * 1000,                                                                
+        "dx": 5.730656948360555 * Math.pow(10, 0) * 1000,
+        "dy": -4.396943118117713 *  Math.pow(10, 1) * 1000,
+        "dz": -4.118645926404930 *  Math.pow(10, 1) * 1000,                                                   
+        "mass": 3.302 * Math.pow(10, 23),                                     
     },
 
     {
         "name": "Venus",
         "size": 4,
         "color": "sandybrown",
-        "x": 0,                                        //earths m from the sun at aphehedron
-        "y": 107477000 * Math.pow(10, 3),                //meters 
-        "dx": -1 * 34.79 * 1000,
-        "dy": 0,                                                        //velocity in m/s assuming the earth starts at 0
-        "mass": 4.867 * Math.pow(10, 24),                                           //kg
+        "x": -3.185212600026195 * Math.pow(10, 7) * 1000,                                        
+        "y": -1.038088603008781 * Math.pow(10, 8) * 1000,
+        "z": 4.135968925768733 * Math.pow(10, 5) * 1000,                                                                
+        "dx": 3.324332633337545 * Math.pow(10, 1) * 1000,
+        "dy": -1.041982593686897 *  Math.pow(10, 1) * 1000,
+        "dz": -2.061363063905469 *  Math.pow(10, 0) * 1000,                                                   
+        "mass": 4.867 * Math.pow(10, 24),                                     
     },
 
     {
         "name": "Earth",
-        "size": 5,
+        "size": 4,
         "color": "lightblue",
-        "x": 1.47098074 * Math.pow(10, 11),                                        //earths m from the sun at aphehedron
-        "y": 0,
-        "dx":0,
-        "dy": 30.28 * 1000,                                                        //velocity in m/s assuming the earth starts at 0
-        "mass": 5.92 * Math.pow(10, 24),                                           //kg
+        "x": -4.413896963605310 * Math.pow(10, 7) * 1000,                                        
+        "y": -1.451928091734621 * Math.pow(10, 8) * 1000,
+        "z": 6.53360897990316 * Math.pow(10, 3) * 1000,                                                                
+        "dx": 2.800667686864530 * Math.pow(10, 1) * 1000,
+        "dy": -8.766573724175240 *  Math.pow(10, 0) * 1000,
+        "dz": 1.164199080515793 *  Math.pow(10, -3) * 1000,                                                   
+        "mass": 5.92 * Math.pow(10, 24),                           
     },
-
-    // {
-    //     "name": "Moon",
-    //     "size": 2,
-    //     "color": "grey",
-    //     "x": 1.47098074 * Math.pow(10, 11) + 384748 * Math.pow(10, 3),                                        //earths m from the sun at aphehedron
-    //     "y": 0,
-    //     "dx":0,
-    //     "dy": 30.28 * 1000 + 1180,                                                 //fudged a little to make it work
-    //     "mass": 7.35 * Math.pow(10, 22),                                           //kg
-    // },
 
     {
         "name": "Mars",
-        "size": 4,
+        "size": 3,
         "color": "red",
-        "x": 0,                                                                     //earths m from the sun at aphehedron
-        "y": - 249200000 * Math.pow(10, 3),                                         //meters 
-        "dx": 1 * 24 * 1000,
-        "dy": 0,                                                                    //velocity in m/s assuming the earth starts at 0
-        "mass": 6.39 * Math.pow(10, 23),                                           //kg
+        "x": 9.853815788785449 * Math.pow(10, 7) * 1000,                                        
+        "y": -1.859006702399974 * Math.pow(10, 8) * 1000,
+        "z": -6.312722055920407 * Math.pow(10, 6) * 1000,                                                                
+        "dx": 2.232500356483245 * Math.pow(10, 1) * 1000,
+        "dy": 1.342725569014516 *  Math.pow(10, 1) * 1000,
+        "dz": -2.663358119170187 *  Math.pow(10, 1) * 1000,                                                   
+        "mass": 6.39 * Math.pow(10, 23),                             
     },
 
     {
         "name": "Jupiter",
         "size": 7,
         "color": "brown",
-        "x": 0,                                                                  //earths m from the sun at aphehedron
-        "y": 740.52 * Math.pow(10, 9),                                          //meters 
-        "dx": -1 * 13.07 * 1000,
-        "dy": 0,                                                                 //velocity in m/s assuming the earth starts at 0
-        "mass": 1.8982 * Math.pow(10, 27),                                              //kg
+        "x": 2.469157956442092 * Math.pow(10, 8) * 1000,                                        
+        "y": -7.330871828410650 * Math.pow(10, 8) * 1000,
+        "z": -2.479562969994336 * Math.pow(10, 6) * 1000,                                                                
+        "dx": 1.223966386784208 * Math.pow(10, 1) * 1000,
+        "dy": 4.791053564713898 *  Math.pow(10, 0) * 1000,
+        "dz": -2.937215460493179 *  Math.pow(10, -1) * 1000,                                                   
+        "mass": 1.8982 * Math.pow(10, 27),                      
     },
 
     {
         "name": "Saturn",
         "size": 6,
         "color": "DARKSALMON",
-        "x": 1352.55 * Math.pow(10, 9),                                        //earths m from the sun at aphehedron
-        "y": 0,                
-        "dx": 0,
-        "dy": 9.68 * 1000,                                                        //velocity in m/s assuming the earth starts at 0
-        "mass": 5.6834 * Math.pow(10, 26),                                           //kg
+        "x": 6.783327228080420 * Math.pow(10, 8) * 1000,                                        
+        "y": -1.336184042705324 * Math.pow(10, 9) * 1000,
+        "z": -3.768125523756862 * Math.pow(10, 6) * 1000,                                                                
+        "dx": 8.092300273805035 * Math.pow(10, 0) * 1000,
+        "dy": 4.350592917046866 *  Math.pow(10, 0) * 1000,
+        "dz": -3.973762106428094 *  Math.pow(10, -1) * 1000,                                                   
+        "mass": 5.6834 * Math.pow(10, 26),                       
     },
 
     {
         "name": "Uranus",
         "size": 5,
         "color": "lightblue",
-        "x": -1 * 2742 * Math.pow(10, 9),                                        //earths m from the sun at aphehedron
-        "y": 0,                 
-        "dx": 0,
-        "dy": -1* 6.8 * 1000,                                                        //velocity in m/s assuming the earth starts at 0
-        "mass": 8.6810 * Math.pow(10, 25),                                           //kg
+        "x": 2.373499937371152 * Math.pow(10, 9) * 1000,                                        
+        "y": 1.771727057895244 * Math.pow(10, 9) * 1000,
+        "z": -2.416378619747138 * Math.pow(10, 7) * 1000,                                                                
+        "dx": -4.111961840092417 * Math.pow(10, 0) * 1000,
+        "dy": 5.144379432253952 *  Math.pow(10, 0) * 1000,
+        "dz": 7.213981544666193 *  Math.pow(10, -2) * 1000,                                                   
+        "mass": 8.6810 * Math.pow(10, 25),                    
     },
 
     {
         "name": "Neptune",
         "size": 5,
         "color": "blue",
-        "x": 4460 * Math.pow(10, 9),                                        //earths m from the sun at aphehedron
-        "y": 0,               
-        "dx": 0,
-        "dy": 5.43 * 1000,                                                        //velocity in m/s assuming the earth starts at 0
-        "mass": 1.024 * Math.pow(10, 26),                                           //kg
+        "x": 4.389213431075289 * Math.pow(10, 9) * 1000,                                        
+        "y": -8.81003949993008 * Math.pow(10, 8) * 1000,
+        "z": -8.302411374876457 * Math.pow(10, 7) * 1000,                                                                
+        "dx": 1.045935840413742 * Math.pow(10, 0) * 1000,
+        "dy": 5.367906463246982 *  Math.pow(10, 0) * 1000,
+        "dz": -1.339554346148746 *  Math.pow(10, -1) * 1000,                                                   
+        "mass": 1.024 * Math.pow(10, 26),                               
     },
 
 ];
@@ -181,8 +177,10 @@ function addBody() {
             "color": "grey",
             "x": 249200000 * Math.pow(10, 3),                                                                 //earths m from the sun at aphelion
             "y": 249200000 * Math.pow(10, 3),
+            "z": 0,
             "dx": -9.68 * 1000,
-            "dy": 9.68 * 1000,                                                                //velocity in m/s assuming the earth starts at 0
+            "dy": 9.68 * 1000,
+            "dz": 0,                                                                //velocity in m/s assuming the earth starts at 0
             "mass": 5.92 * Math.pow(10, 24),                                       //kg
         }
     )
@@ -219,7 +217,7 @@ function startStop() {
             timer = setInterval(function(){ 
                 //to make sure calculation timing is in line, really pushing the JS stack here to its limit
                 //also use a trick here to force JS to do more calculations than the 1ms interval will allow
-                //var t0 = performance.now()
+                // var t0 = performance.now()
                 for (var i = 0; i < 500; i++) {
                     startMotion(solArray)
                 } 
@@ -239,7 +237,7 @@ function dataUpdater() {
 function startMotion(body_array) {
     if(runOrbits) {
         moveBodies(body_array)
-        minutes += 5
+        minutes += 1
     }
 }
 
@@ -249,11 +247,11 @@ function moveBodies(body_array) {
     var allForces = sumForces(body_array);
 
     for (let i = 0; i < body_array.length; i++) {
-        updatePosition(allForces[i].Fx, allForces[i].Fy, body_array[i], 300)        //every five minutes in this timeframe, run a calc
+        updatePosition(allForces[i].Fx, allForces[i].Fy, body_array[i], 60)        //every five minutes in this timeframe, run a calc
     }   
 }
 
-// body 1 will recieve proper force mag, body 2 is reference 
+//body 1 will recieve proper force mag, body 2 is reference 
 function calculateForce(body1, body2) {  
     var m1 =            body1.mass,
         m2 =            body2.mass,
@@ -262,7 +260,7 @@ function calculateForce(body1, body2) {
         y1 =            body1.y,
         y2 =            body2.y,
         xdif =          x2 - x1,
-        ydif =          y2 - y1
+        ydif =          y2 - y1,
         theta =         Math.atan2(ydif, xdif),
         GravConst =     6.67408 * Math.pow(10, -11),
         distance =      Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2)), .5),
@@ -271,6 +269,7 @@ function calculateForce(body1, body2) {
         Fy =            Fmag * Math.sin(theta) 
     return [Fx, Fy]
 }
+
 
 //not very efficient, as we'll be doing this for every planet, and redoing a few calculations multiple times but its okay 
 function sumForces(body_array) {
