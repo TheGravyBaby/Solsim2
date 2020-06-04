@@ -10,11 +10,13 @@ var solArray = [
         "name": "Sun",
         "size": 10,
         "color": "orange",
-        "x": 0,                                                                 
-        "y": 0,
-        "dx":0,
-        "dy": 0,                                                                
-        "mass": 1.985 * Math.pow(10, 30),
+        "x": -7.582243850428136 * Math.pow(10, 5) * 1000,                                                                 
+        "y": 1.049352731119007 * Math.pow(10, 6) * 1000,
+        "z": 8.765910727530660 * Math.pow(10, 3) * 1000,  
+        "dx": -1.402789385026487 * Math.pow(10, -2) * 1000,
+        "dy": -6.257072806069494 *  Math.pow(10, -3) * 1000,
+        "dz": 4.031602500468826 *  Math.pow(10, -4) * 1000,                                                               
+        "mass": 1988500 * Math.pow(10, 24),
         "lines":   [],
                                
     },
@@ -23,12 +25,12 @@ var solArray = [
         "name": "Mercury",
         "size": 3,
         "color": "grey",
-        "x": (-5.861734219855962 * Math.pow(10, 7) * 1000),                                        
-        "y": -2.012988097831650 * Math.pow(10, 7) * 1000,
-        "z": 3.732297677176796 * Math.pow(10, 6) * 1000,                                                                
-        "dx": 5.730656948360555 * Math.pow(10, 0) * 1000,
-        "dy": -4.396943118117713 *  Math.pow(10, 1) * 1000,
-        "dz": -4.118645926404930 *  Math.pow(10, 1) * 1000,                                                   
+        "x": -5.937556658360244 * Math.pow(10, 7) * 1000,                                        
+        "y": -1.908052824719750 * Math.pow(10, 7) * 1000,
+        "z": 3.741063587904326 * Math.pow(10, 6) * 1000,                                                                
+        "dx":  5.716629054510291 * Math.pow(10, 0) * 1000,
+        "dy": -4.397568825398321 *  Math.pow(10, 1) * 1000,
+        "dz": -4.118242766154887 *  Math.pow(10, 0) * 1000,                                                   
         "mass": 3.302 * Math.pow(10, 23),
         "lines":   [],
                                   
@@ -38,12 +40,12 @@ var solArray = [
         "name": "Venus",
         "size": 4,
         "color": "sandybrown",
-        "x": -3.185212600026195 * Math.pow(10, 7) * 1000,                                        
-        "y": -1.038088603008781 * Math.pow(10, 8) * 1000,
-        "z": 4.135968925768733 * Math.pow(10, 5) * 1000,                                                                
-        "dx": 3.324332633337545 * Math.pow(10, 1) * 1000,
-        "dy": -1.041982593686897 *  Math.pow(10, 1) * 1000,
-        "dz": -2.061363063905469 *  Math.pow(10, 0) * 1000,                                                   
+        "x": -3.261035038530476 * Math.pow(10, 7) * 1000,                                        
+        "y": -1.027595075697591 * Math.pow(10, 8) * 1000,
+        "z": 4.223628033044040 * Math.pow(10, 5) * 1000,                                                                
+        "dx": 3.322929843952519 * Math.pow(10, 1) * 1000,
+        "dy": -1.042608300967504 *  Math.pow(10, 1) * 1000,
+        "dz": -2.060959903655422 *  Math.pow(10, 0) * 1000,                                                   
         "mass": 4.867 * Math.pow(10, 24),
         "lines":   [],
                                 
@@ -53,12 +55,12 @@ var solArray = [
         "name": "Earth",
         "size": 4,
         "color": "lightblue",
-        "x": -4.413896963605310 * Math.pow(10, 7) * 1000,                                        
-        "y": -1.451928091734621 * Math.pow(10, 8) * 1000,
-        "z": 6.53360897990316 * Math.pow(10, 3) * 1000,                                                                
-        "dx": 2.800667686864530 * Math.pow(10, 1) * 1000,
-        "dy": -8.766573724175240 *  Math.pow(10, 0) * 1000,
-        "dz": 1.164199080515793 *  Math.pow(10, -3) * 1000,                                                   
+        "x": -4.489719402109592 * Math.pow(10, 7) * 1000,                                        
+        "y": -1.441434564423431 * Math.pow(10, 8) * 1000,
+        "z": 1.529951970743388 * Math.pow(10, 3) * 1000,                                                                
+        "dx": 2.799264897479503 * Math.pow(10, 1) * 1000,
+        "dy": -8.772830796981310 *  Math.pow(10, 0) * 1000,
+        "dz": 1.567359330562734 *  Math.pow(10, -3) * 1000,                                                   
         "mass": 5.92 * Math.pow(10, 24),
         "lines":   [],
                         
@@ -68,12 +70,12 @@ var solArray = [
         "name": "Mars",
         "size": 3,
         "color": "red",
-        "x": 9.853815788785449 * Math.pow(10, 7) * 1000,                                        
-        "y": -1.859006702399974 * Math.pow(10, 8) * 1000,
-        "z": -6.312722055920407 * Math.pow(10, 6) * 1000,                                                                
-        "dx": 2.232500356483245 * Math.pow(10, 1) * 1000,
-        "dy": 1.342725569014516 *  Math.pow(10, 1) * 1000,
-        "dz": -2.663358119170187 *  Math.pow(10, 1) * 1000,                                                   
+        "x": 9.777993347253025 * Math.pow(10, 7) * 1000,                                        
+        "y": -1.848513174329408 * Math.pow(10, 8) * 1000,
+        "z": -6.303956079397298 * Math.pow(10, 6) * 1000,                                                                
+        "dx": 2.231097567144139 * Math.pow(10, 1) * 1000,
+        "dy": 1.342099861791514 *  Math.pow(10, 1) * 1000,
+        "dz": -2.659326520797185 *  Math.pow(10, -1) * 1000,                                                   
         "mass": 6.39 * Math.pow(10, 23),
         "lines":   [],
                           
@@ -83,12 +85,12 @@ var solArray = [
         "name": "Jupiter",
         "size": 7,
         "color": "brown",
-        "x": 2.469157956442092 * Math.pow(10, 8) * 1000,                                        
-        "y": -7.330871828410650 * Math.pow(10, 8) * 1000,
-        "z": -2.479562969994336 * Math.pow(10, 6) * 1000,                                                                
-        "dx": 1.223966386784208 * Math.pow(10, 1) * 1000,
-        "dy": 4.791053564713898 *  Math.pow(10, 0) * 1000,
-        "dz": -2.937215460493179 *  Math.pow(10, -1) * 1000,                                                   
+        "x": 2.461575712591664 * Math.pow(10, 8) * 1000,                                        
+        "y": -7.320378301099460 * Math.pow(10, 8) * 1000,
+        "z": -2.470797059266835 * Math.pow(10, 6) * 1000,                                                                
+        "dx": 1.222563597399181 * Math.pow(10, 1) * 1000,
+        "dy": 4.784796491907828 *  Math.pow(10, 0) * 1000,
+        "dz": -2.933183857992712 *  Math.pow(10, -1) * 1000,                                                   
         "mass": 1.8982 * Math.pow(10, 27),
         "lines":   [],
                
@@ -98,12 +100,12 @@ var solArray = [
         "name": "Saturn",
         "size": 6,
         "color": "DARKSALMON",
-        "x": 6.783327228080420 * Math.pow(10, 8) * 1000,                                        
-        "y": -1.336184042705324 * Math.pow(10, 9) * 1000,
-        "z": -3.768125523756862 * Math.pow(10, 6) * 1000,                                                                
-        "dx": 8.092300273805035 * Math.pow(10, 0) * 1000,
-        "dy": 4.350592917046866 *  Math.pow(10, 0) * 1000,
-        "dz": -3.973762106428094 *  Math.pow(10, -1) * 1000,                                                   
+        "x": 6.775744982875707 * Math.pow(10, 8) * 1000,                                        
+        "y": -1.335134690125010 * Math.pow(10, 9) * 1000,
+        "z": -3.759359586556315 * Math.pow(10, 6) * 1000,                                                                
+        "dx": 8.078272381372704 * Math.pow(10, 0) * 1000,
+        "dy": 4.344335844450176 *  Math.pow(10, 0) * 1000,
+        "dz": -3.969730509269223 *  Math.pow(10, -1) * 1000,                                                   
         "mass": 5.6834 * Math.pow(10, 26),
         "lines":   [],
                       
@@ -113,12 +115,12 @@ var solArray = [
         "name": "Uranus",
         "size": 5,
         "color": "lightblue",
-        "x": 2.373499937371152 * Math.pow(10, 9) * 1000,                                        
-        "y": 1.771727057895244 * Math.pow(10, 9) * 1000,
-        "z": -2.416378619747138 * Math.pow(10, 7) * 1000,                                                                
-        "dx": -4.111961840092417 * Math.pow(10, 0) * 1000,
-        "dy": 5.144379432253952 *  Math.pow(10, 0) * 1000,
-        "dz": 7.213981544666193 *  Math.pow(10, -2) * 1000,                                                   
+        "x": 2.372741712986109 * Math.pow(10, 9) * 1000,                                        
+        "y": 1.772776410626363 * Math.pow(10, 9) * 1000,
+        "z": -2.415502028674400 * Math.pow(10, 7) * 1000,                                                                
+        "dx": -4.125989733942681 * Math.pow(10, 0) * 1000,
+        "dy": 5.138122359447883 *  Math.pow(10, 0) * 1000,
+        "dz": 7.254297569670909 *  Math.pow(10, -2) * 1000,                                                   
         "mass": 8.6810 * Math.pow(10, 25),
         "lines":   [],
                
@@ -128,12 +130,12 @@ var solArray = [
         "name": "Neptune",
         "size": 5,
         "color": "blue",
-        "x": 4.389213431075289 * Math.pow(10, 9) * 1000,                                        
-        "y": -8.81003949993008 * Math.pow(10, 8) * 1000,
-        "z": -8.302411374876457 * Math.pow(10, 7) * 1000,                                                                
-        "dx": 1.045935840413742 * Math.pow(10, 0) * 1000,
-        "dy": 5.367906463246982 *  Math.pow(10, 0) * 1000,
-        "dz": -1.339554346148746 *  Math.pow(10, -1) * 1000,                                                   
+        "x": 4.388455206690246 * Math.pow(10, 9) * 1000,                                        
+        "y": -8.799545972618895 * Math.pow(10, 8) * 1000,
+        "z": -8.301534783803701 * Math.pow(10, 7) * 1000,                                                                
+        "dx": 1.031907946563477 * Math.pow(10, 0) * 1000,
+        "dy": 5.361649390440912 *  Math.pow(10, 0) * 1000,
+        "dz": -1.335522743648274 *  Math.pow(10, -1) * 1000,                                                   
         "mass": 1.024 * Math.pow(10, 26),
         "lines":   [],
                           
@@ -143,17 +145,16 @@ var solArray = [
         "name": "Pluto",
         "size": 2,
         "color": "grey",
-        "x": 2.009993969375195 * Math.pow(10, 9) * 1000,                                        
-        "y": -4.680132946567087 * Math.pow(10, 9) * 1000,
-        "z": -8.050734500125456 * Math.pow(10, 7) * 1000,                                                                
-        "dx": 5.146291852471521 * Math.pow(10, 0) * 1000,
-        "dy": 1.009152902698594 *  Math.pow(10, 0) * 1000,
-        "dz": -1.578620378732422 *  Math.pow(10, 0) * 1000,                                                   
+        "x": 2.009235744867388 * Math.pow(10, 9) * 1000,                                        
+        "y": -4.679083593987942 * Math.pow(10, 9) * 1000,
+        "z": -8.049857906899095 * Math.pow(10, 7) * 1000,                                                                
+        "dx": 5.132263959205242 * Math.pow(10, 0) * 1000,
+        "dy": 1.002895829865026 *  Math.pow(10, 0) * 1000,
+        "dz": -1.578217218701207 *  Math.pow(10, 0) * 1000,                                                   
         "mass": 1.307 * Math.pow(10, 22),
         "lines":   [],
                           
     },
-
 ];
 var scale = 4500;
 
@@ -220,19 +221,18 @@ function updateSystem() {
 }
 
 function addBody() {
-
     solArray.push(
         {
-            "name": "NewPlanet",
-            "size": 4,
-            "color": "grey",
-            "x": 249200000 * Math.pow(10, 3),                                                                 
-            "y": 249200000 * Math.pow(10, 3),
+            "name": "New Body",
+            "size": 8,
+            "color": "yellow",
+            "x": 549200000 * Math.pow(10, 3),                                                                 
+            "y": 549200000 * Math.pow(10, 3),
             "z": 0,
             "dx": -9.68 * 1000,
             "dy": 9.68 * 1000,
             "dz": 0,                                                                
-            "mass": 5.92 * Math.pow(10, 24),
+            "mass": 5.92 * Math.pow(10, 29),
             "lines":  []                                      
         }
     )
@@ -269,12 +269,12 @@ function startStop() {
             timer = setInterval(function(){
                 //to make sure calculation timing is in line, really pushing the JS stack here to its limit
                 //also use a trick here to force JS to do more calculations than the 1ms interval will allow
-                 var t0 = performance.now()
+                //var t0 = performance.now()
                 for (var i = 0; i < 500; i++) {
                     startMotion(solArray)
                 }
-                 var t1 = performance.now()
-                console.log("Call to move took " + (t1 - t0) + " milliseconds.")
+                //var t1 = performance.now()
+                //console.log("Call to move took " + (t1 - t0) + " milliseconds.")
             }, 25);
         }
      }
@@ -422,11 +422,9 @@ function renderObjects(body_array) {
             });
 
         svg.append("g")
-            //.attr("transform", `translate(${height - 40}, 40)`)
             .call(yAxis);
 
         svg.append("g")
-            //.attr("transform", `translate(40, ${width - 40})`)
             .call(xAxis);
     }
 
@@ -442,11 +440,10 @@ function renderObjects(body_array) {
     
     bodyPath.attr("d", function(d) { return orbitPath(d.lines);} )
         .attr("fill", "none")
-		.attr("stroke", "grey")
+		.attr("stroke", function(d) { return d.color;})
 		.attr("stroke-width", 1);
     }
    
-
     var circles = svg.selectAll("foo")
         .data(body_array)
         .enter()
@@ -562,7 +559,7 @@ function toggleGrid () {
     }
 }
 
-var linesOn = true;
+var linesOn = false;
 function toggleLines () {
     if (!linesOn) {
         linesOn = true;
