@@ -139,6 +139,21 @@ var solArray = [
                           
     },
 
+    {
+        "name": "Pluto",
+        "size": 2,
+        "color": "grey",
+        "x": 2.009993969375195 * Math.pow(10, 9) * 1000,                                        
+        "y": -4.680132946567087 * Math.pow(10, 9) * 1000,
+        "z": -8.050734500125456 * Math.pow(10, 7) * 1000,                                                                
+        "dx": 5.146291852471521 * Math.pow(10, 0) * 1000,
+        "dy": 1.009152902698594 *  Math.pow(10, 0) * 1000,
+        "dz": -1.578620378732422 *  Math.pow(10, 0) * 1000,                                                   
+        "mass": 1.307 * Math.pow(10, 22),
+        "lines":   [],
+                          
+    },
+
 ];
 var scale = 4500;
 
@@ -345,8 +360,8 @@ function renderObjects(body_array) {
         focusBody();
     }
 
-    var width = 1600
-    var height = 1000
+    var width = $(window).width() * .85;
+    var height = $(window).height();
     var xMargin = 64;
     var yMargin = 40;
     var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
