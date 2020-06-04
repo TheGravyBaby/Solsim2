@@ -2,6 +2,8 @@ var minutes = 0;
 var runOrbits = false;
 var hasRun = false;
 
+var lineArray = []
+
 //positions will be updated with nasa data
 var solArray = [
     {
@@ -12,7 +14,9 @@ var solArray = [
         "y": 0,
         "dx":0,
         "dy": 0,                                                                
-        "mass": 1.985 * Math.pow(10, 30),                                       
+        "mass": 1.985 * Math.pow(10, 30),
+        "lines":   [],
+                               
     },
 
     {
@@ -25,7 +29,9 @@ var solArray = [
         "dx": 5.730656948360555 * Math.pow(10, 0) * 1000,
         "dy": -4.396943118117713 *  Math.pow(10, 1) * 1000,
         "dz": -4.118645926404930 *  Math.pow(10, 1) * 1000,                                                   
-        "mass": 3.302 * Math.pow(10, 23),                                     
+        "mass": 3.302 * Math.pow(10, 23),
+        "lines":   [],
+                                  
     },
 
     {
@@ -38,7 +44,9 @@ var solArray = [
         "dx": 3.324332633337545 * Math.pow(10, 1) * 1000,
         "dy": -1.041982593686897 *  Math.pow(10, 1) * 1000,
         "dz": -2.061363063905469 *  Math.pow(10, 0) * 1000,                                                   
-        "mass": 4.867 * Math.pow(10, 24),                                     
+        "mass": 4.867 * Math.pow(10, 24),
+        "lines":   [],
+                                
     },
 
     {
@@ -51,7 +59,9 @@ var solArray = [
         "dx": 2.800667686864530 * Math.pow(10, 1) * 1000,
         "dy": -8.766573724175240 *  Math.pow(10, 0) * 1000,
         "dz": 1.164199080515793 *  Math.pow(10, -3) * 1000,                                                   
-        "mass": 5.92 * Math.pow(10, 24),                           
+        "mass": 5.92 * Math.pow(10, 24),
+        "lines":   [],
+                        
     },
 
     {
@@ -64,7 +74,9 @@ var solArray = [
         "dx": 2.232500356483245 * Math.pow(10, 1) * 1000,
         "dy": 1.342725569014516 *  Math.pow(10, 1) * 1000,
         "dz": -2.663358119170187 *  Math.pow(10, 1) * 1000,                                                   
-        "mass": 6.39 * Math.pow(10, 23),                             
+        "mass": 6.39 * Math.pow(10, 23),
+        "lines":   [],
+                          
     },
 
     {
@@ -77,7 +89,9 @@ var solArray = [
         "dx": 1.223966386784208 * Math.pow(10, 1) * 1000,
         "dy": 4.791053564713898 *  Math.pow(10, 0) * 1000,
         "dz": -2.937215460493179 *  Math.pow(10, -1) * 1000,                                                   
-        "mass": 1.8982 * Math.pow(10, 27),                      
+        "mass": 1.8982 * Math.pow(10, 27),
+        "lines":   [],
+               
     },
 
     {
@@ -90,7 +104,9 @@ var solArray = [
         "dx": 8.092300273805035 * Math.pow(10, 0) * 1000,
         "dy": 4.350592917046866 *  Math.pow(10, 0) * 1000,
         "dz": -3.973762106428094 *  Math.pow(10, -1) * 1000,                                                   
-        "mass": 5.6834 * Math.pow(10, 26),                       
+        "mass": 5.6834 * Math.pow(10, 26),
+        "lines":   [],
+                      
     },
 
     {
@@ -103,7 +119,9 @@ var solArray = [
         "dx": -4.111961840092417 * Math.pow(10, 0) * 1000,
         "dy": 5.144379432253952 *  Math.pow(10, 0) * 1000,
         "dz": 7.213981544666193 *  Math.pow(10, -2) * 1000,                                                   
-        "mass": 8.6810 * Math.pow(10, 25),                    
+        "mass": 8.6810 * Math.pow(10, 25),
+        "lines":   [],
+               
     },
 
     {
@@ -116,14 +134,18 @@ var solArray = [
         "dx": 1.045935840413742 * Math.pow(10, 0) * 1000,
         "dy": 5.367906463246982 *  Math.pow(10, 0) * 1000,
         "dz": -1.339554346148746 *  Math.pow(10, -1) * 1000,                                                   
-        "mass": 1.024 * Math.pow(10, 26),                               
+        "mass": 1.024 * Math.pow(10, 26),
+        "lines":   [],
+                          
     },
 
 ];
 var scale = 4500;
 
 render = setInterval(function(){renderObjects(solArray)}, 33);
+renderLines = setInterval(function(){populateLines()}, 100);
 updateFields = setInterval(function(){dataUpdater()}, 500);
+
 
 function populateBodyList() {
     $('#bodyList').empty()
@@ -135,6 +157,20 @@ function populateBodyList() {
     });
 }
 populateBodyList()
+
+function populateLines() {
+    
+    for (let i = 0; i < solArray.length; i++) {
+        if (solArray[i].lines.length < 100000) {
+            solArray[i].lines.push([solArray[i].x, solArray[i].y])
+        }
+        else {
+            solArray[i].lines.shift()
+            solArray[i].lines.push([solArray[i].x, solArray[i].y])
+        }
+    }
+    //console.log(solArray)
+}
 
 function populateTable() {
     var body = $('#bodyList').prop('selectedIndex')
@@ -175,13 +211,14 @@ function addBody() {
             "name": "NewPlanet",
             "size": 4,
             "color": "grey",
-            "x": 249200000 * Math.pow(10, 3),                                                                 //earths m from the sun at aphelion
+            "x": 249200000 * Math.pow(10, 3),                                                                 
             "y": 249200000 * Math.pow(10, 3),
             "z": 0,
             "dx": -9.68 * 1000,
             "dy": 9.68 * 1000,
-            "dz": 0,                                                                //velocity in m/s assuming the earth starts at 0
-            "mass": 5.92 * Math.pow(10, 24),                                       //kg
+            "dz": 0,                                                                
+            "mass": 5.92 * Math.pow(10, 24),
+            "lines":  []                                      
         }
     )
     populateBodyList();
@@ -217,12 +254,12 @@ function startStop() {
             timer = setInterval(function(){
                 //to make sure calculation timing is in line, really pushing the JS stack here to its limit
                 //also use a trick here to force JS to do more calculations than the 1ms interval will allow
-                // var t0 = performance.now()
+                 var t0 = performance.now()
                 for (var i = 0; i < 500; i++) {
                     startMotion(solArray)
                 }
-                // var t1 = performance.now()
-                // console.log("Call to move took " + (t1 - t0) + " milliseconds.")
+                 var t1 = performance.now()
+                console.log("Call to move took " + (t1 - t0) + " milliseconds.")
             }, 25);
         }
      }
@@ -262,15 +299,14 @@ function calculateForce(body1, body2) {
         xdif =          x2 - x1,
         ydif =          y2 - y1,
         theta =         Math.atan2(ydif, xdif),
-        //GravConst =     6.67408 * Math.pow(10, -11),
-        GravConst =     6.65408 * Math.pow(10, -11),
+        GravConst =     6.67408 * Math.pow(10, -11),
+        //GravConst =   6.65408 * Math.pow(10, -11),
         distance =      Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2)), .5),
         Fmag =          m1 * m2 * GravConst / (distance * distance),
         Fx =            Fmag * Math.cos(theta)
         Fy =            Fmag * Math.sin(theta)
     return [Fx, Fy]
 }
-
 
 //not very efficient, as we'll be doing this for every planet, and redoing a few calculations multiple times but its okay 
 function sumForces(body_array) {
@@ -360,15 +396,15 @@ function renderObjects(body_array) {
 
         // Add scales to axis
         var xAxis = d3.axisBottom(x).ticks(16)
-                    .tickFormat(function (d) {
-                        return d / 1000000000 +"Gm";
-                    });
+            .tickFormat(function (d) {
+                return d / 1000000000 +"Gm";
+            });
 
 
         var yAxis = d3.axisRight(y).ticks(10)
-                    .tickFormat(function (d) {
-                        return d / 1000000000 +"Gm";
-                    });
+            .tickFormat(function (d) {
+                return d / 1000000000 +"Gm";
+            });
 
         svg.append("g")
             //.attr("transform", `translate(${height - 40}, 40)`)
@@ -379,10 +415,27 @@ function renderObjects(body_array) {
             .call(xAxis);
     }
 
+    if (linesOn) {
+        var orbitPath = d3.line()
+        .x(function(d) { return x(d[0]);})
+        .y(function(d) { return y(d[1]);});
+
+    var bodyPath =  svg.selectAll("boo")
+        .data(body_array)
+        .enter()
+        .append("path")
+    
+    bodyPath.attr("d", function(d) { return orbitPath(d.lines);} )
+        .attr("fill", "none")
+		.attr("stroke", "grey")
+		.attr("stroke-width", 1);
+    }
+   
+
     var circles = svg.selectAll("foo")
-    .data(body_array)
-    .enter()
-    .append("circle")
+        .data(body_array)
+        .enter()
+        .append("circle")
 
     circles.attr("cx", function(d) { return x(d.x);})
         .attr("cy", function(d) { return y(d.y);})
@@ -493,3 +546,14 @@ function toggleGrid () {
         gridOn = false;
     }
 }
+
+var linesOn = true;
+function toggleLines () {
+    if (!linesOn) {
+        linesOn = true;
+    }
+    else {
+        linesOn = false;
+    }
+}
+
