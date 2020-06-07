@@ -158,8 +158,8 @@ var solArray = [
 ];
 var scale = 4500;
 
-render = setInterval(function(){renderObjects(solArray)}, 33);
-renderLines = setInterval(function(){populateLines()}, 100);
+render = setInterval(function(){renderObjects(solArray)}, 42);
+renderLines = setInterval(function(){populateLines()}, 126);
 updateFields = setInterval(function(){dataUpdater()}, 500);
 
 
@@ -168,8 +168,8 @@ function populateBodyList() {
     solArray.forEach(element => {
         $('#bodyList')
         .append($("<option></option>")
-                   .attr("value", element.name)
-                   .text(element.name));
+            .attr("value", element.name)
+            .text(element.name));
     });
 }
 populateBodyList()
@@ -177,7 +177,7 @@ populateBodyList()
 function populateLines() {
     
     for (let i = 0; i < solArray.length; i++) {
-        if (solArray[i].lines.length < 100000) {
+        if (solArray[i].lines.length < 1500) {
             solArray[i].lines.push([solArray[i].x, solArray[i].y])
         }
         else {
@@ -197,8 +197,10 @@ function populateTable() {
     $('#bodyColor').empty().append(solArray[body].color)
     $('#bodyX').empty().append(solArray[body].x)
     $('#bodyY').empty().append(solArray[body].y)
+    $('#bodyZ').empty().append(solArray[body].z)
     $('#bodydX').empty().append(solArray[body].dx)
     $('#bodydY').empty().append(solArray[body].dy)
+    $('#bodydZ').empty().append(solArray[body].dz)
 }
 populateTable()
 
@@ -213,8 +215,10 @@ function updateSystem() {
     solArray[body].color = $('#bodyColor').val();
     solArray[body].x = Number($('#bodyX').val());
     solArray[body].y = Number($('#bodyY').val());
+    solArray[body].z = Number($('#bodyZ').val());
     solArray[body].dx = Number($('#bodydX').val());
     solArray[body].dy = Number($('#bodydY').val());
+    solArray[body].dz = Number($('#bodydZ').val());
 
     populateBodyList()
     $("#bodyList").val(name)
@@ -223,7 +227,7 @@ function updateSystem() {
 function addBody() {
     solArray.push(
         {
-            "name": "New Body",
+            "name": "NewBody",
             "size": 8,
             "color": "yellow",
             "x": 549200000 * Math.pow(10, 3),                                                                 
@@ -232,12 +236,12 @@ function addBody() {
             "dx": -9.68 * 1000,
             "dy": 9.68 * 1000,
             "dz": 0,                                                                
-            "mass": 5.92 * Math.pow(10, 29),
+            "mass": 5.00 * Math.pow(10, 29),
             "lines":  []                                      
         }
     )
     populateBodyList();
-    $("#bodyList").val("NewPlanet")
+    $("#bodyList").val("NewBody")
     populateTable();
     console.log(solArray)
 }
@@ -269,13 +273,13 @@ function startStop() {
             timer = setInterval(function(){
                 //to make sure calculation timing is in line, really pushing the JS stack here to its limit
                 //also use a trick here to force JS to do more calculations than the 1ms interval will allow
-                //var t0 = performance.now()
-                for (var i = 0; i < 500; i++) {
+                var t0 = performance.now()
+                for (var i = 0; i < 600; i++) {
                     startMotion(solArray)
                 }
-                //var t1 = performance.now()
-                //console.log("Call to move took " + (t1 - t0) + " milliseconds.")
-            }, 25);
+                var t1 = performance.now()
+                console.log("Call to move took " + (t1 - t0) + " milliseconds.")
+            }, 12);
         }
      }
 }
@@ -299,7 +303,7 @@ function moveBodies(body_array) {
     var allForces = sumForces(body_array);
 
     for (let i = 0; i < body_array.length; i++) {
-        updatePosition(allForces[i].Fx, allForces[i].Fy, body_array[i], 60)        //every five minutes in this timeframe, run a calc
+        updatePosition(allForces[i].Fx, allForces[i].Fy, allForces[i].Fz, body_array[i], 60)      
     }   
 }
 
@@ -311,16 +315,21 @@ function calculateForce(body1, body2) {
         x2 =            body2.x,
         y1 =            body1.y,
         y2 =            body2.y,
+        z1 =            body1.z,
+        z2 =            body2.z,
         xdif =          x2 - x1,
         ydif =          y2 - y1,
+        zdif =         z2 - z1,
+        distance2d =    Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2)), .5),
+        distance =      Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2) + Math.pow((zdif), 2)), .5),
         theta =         Math.atan2(ydif, xdif),
+        phi =           Math.atan2(zdif, distance2d),
         GravConst =     6.67408 * Math.pow(10, -11),
-        //GravConst =   6.65408 * Math.pow(10, -11),
-        distance =      Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2)), .5),
         Fmag =          m1 * m2 * GravConst / (distance * distance),
         Fx =            Fmag * Math.cos(theta)
         Fy =            Fmag * Math.sin(theta)
-    return [Fx, Fy]
+        Fz =            Fmag * Math.sin(phi)
+    return [Fx, Fy, Fz]
 }
 
 //not very efficient, as we'll be doing this for every planet, and redoing a few calculations multiple times but its okay 
@@ -329,29 +338,34 @@ function sumForces(body_array) {
     for (i=0; i< body_array.length; i++) {
         var Fx = 0;
         var Fy = 0;
+        var Fz = 0;
         for (let j = 0; j < body_array.length; j++) {
             if (i != j) {
                 var force = calculateForce(body_array[i], body_array[j])
                 Fx += force[0]
                 Fy += force[1]
+                Fz += force[2]
             }
         }
-        universalForceArray.push({"Fx": Fx, "Fy": Fy})
+        universalForceArray.push({"Fx": Fx, "Fy": Fy, "Fz": Fz})
     }
 return universalForceArray;
 }
 
-function updatePosition(Fx, Fy, body, dt) {
+function updatePosition(Fx, Fy, Fz, body, dt) {
     var mass = body.mass,
         ddx = Fx / mass,
         ddy = Fy / mass;
+        ddz = Fz / mass;
 
     //add the accelertation * time component
     body.dx = body.dx + ddx * dt
     body.dy = body.dy + ddy * dt
+    body.dz = body.dz + ddz * dt
 
     body.x = body.x + body.dx * dt + .5 * ddx * Math.pow(dt, 2)
     body.y = body.y + body.dy * dt + .5 * ddy * Math.pow(dt, 2)
+    body.z = body.z + body.dz * dt + .5 * ddz * Math.pow(dt, 2)
 }
 
 function renderObjects(body_array) {
@@ -379,7 +393,7 @@ function renderObjects(body_array) {
     var y = d3.scaleLinear()
         .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
         .range([height - yMargin, yMargin]);
-
+        
     if (gridOn) {
         // gridlines in x axis function
         function make_x_gridlines() {
