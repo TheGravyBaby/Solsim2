@@ -178,11 +178,11 @@ function populateLines() {
     
     for (let i = 0; i < solArray.length; i++) {
         if (solArray[i].lines.length < 1500) {
-            solArray[i].lines.push([solArray[i].x, solArray[i].y])
+            solArray[i].lines.push([solArray[i].x, solArray[i].y, solArray[i].z])
         }
         else {
             solArray[i].lines.shift()
-            solArray[i].lines.push([solArray[i].x, solArray[i].y])
+            solArray[i].lines.push([solArray[i].x, solArray[i].y, , solArray[i].z])
         }
     }
     //console.log(solArray)
@@ -393,7 +393,7 @@ function renderObjects(body_array) {
     var y = d3.scaleLinear()
         .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
         .range([height - yMargin, yMargin]);
-        
+
     if (gridOn) {
         // gridlines in x axis function
         function make_x_gridlines() {
@@ -582,4 +582,3 @@ function toggleLines () {
         linesOn = false;
     }
 }
-
