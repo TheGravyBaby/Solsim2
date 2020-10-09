@@ -12,9 +12,9 @@ Upon loading SolSim you will be given a model of our existing solar system, with
   	Add Body      :   Adds a body to the system, the default body is a star orbiting a little outside of Jupiter, this is changable by the user.
   	Remove Body   :   Removes the selected body from the system.
   	Update Body   :   When the user has paused the system, they can alter the various fields for position, velocity, mass, name, size. Update body
-                    will confirm these changes for the selected body.  
+                      will confirm these changes for the selected body.  
   	Toggle Grid   :   Toggles the grid lines for the x y coordinate plane. 
- 	 	Focus Body    :   This one is cool, it will lock the camera onto the selected body. Very helpful if one wants to, say, follow a moon.
+    Focus Body    :   This one is cool, it will lock the camera onto the selected body. Very helpful if one wants to, say, follow a moon.
   	Recenter      :   If you get lost, you can return to 0, 0 with this button.
   	Toggle Paths  :   Will trace the paths of the various bodies as they travel. 
   	Start / Stop  :   Obviously will start and stop rotations
