@@ -1,7 +1,6 @@
-var minutes = 0;
+var seconds = 0;
 var runOrbits = false;
 var hasRun = false;
-
 var lineArray = []
 
 //positions will be updated with nasa data
@@ -157,9 +156,10 @@ var solArray = [
     },
 ];
 var scale = 4500;
+var granularity = 60;
 
 render = setInterval(function(){renderObjects(solArray)}, 42);
-renderLines = setInterval(function(){populateLines()}, 126);
+renderLines = setInterval(function(){populateLines()}, 300);
 updateFields = setInterval(function(){dataUpdater()}, 500);
 
 
@@ -174,10 +174,14 @@ function populateBodyList() {
 }
 populateBodyList()
 
+function changeGranularity() {
+    granularity = Number($('#granularity').val());
+};
+
 function populateLines() {
     
     for (let i = 0; i < solArray.length; i++) {
-        if (solArray[i].lines.length < 1500) {
+        if (solArray[i].lines.length < 1000) {
             solArray[i].lines.push([solArray[i].x, solArray[i].y, solArray[i].z])
         }
         else {
@@ -202,15 +206,15 @@ function populateTable() {
     $('#bodydY').empty().append(solArray[body].dy)
     $('#bodydZ').empty().append(solArray[body].dz)
 }
+
 populateTable()
 
 function updateSystem() {
-    var body = $('#bodyList').prop('selectedIndex')
-
-    var name = $('#bodyName').val()
+    var body = $('#bodyList').prop('selectedIndex');
+    var name = $('#bodyName').val();
 
     solArray[body].name = $('#bodyName').val();
-    solArray[body].size = $('#bodyRadius').val();
+    solArray[body].size = Number($('#bodyRadius').val());
     solArray[body].mass = Number($('#bodyMass').val())
     solArray[body].color = $('#bodyColor').val();
     solArray[body].x = Number($('#bodyX').val());
@@ -220,8 +224,8 @@ function updateSystem() {
     solArray[body].dy = Number($('#bodydY').val());
     solArray[body].dz = Number($('#bodydZ').val());
 
-    populateBodyList()
-    $("#bodyList").val(name)
+    populateBodyList();
+    $("#bodyList").val(name);
 }
 
 function addBody() {
@@ -273,13 +277,13 @@ function startStop() {
             timer = setInterval(function(){
                 //to make sure calculation timing is in line, really pushing the JS stack here to its limit
                 //also use a trick here to force JS to do more calculations than the 1ms interval will allow
-                var t0 = performance.now()
-                for (var i = 0; i < 600; i++) {
+                //var t0 = performance.now()
+                for (var i = 0; i < 500; i++) {
                     startMotion(solArray)
                 }
-                var t1 = performance.now()
-                console.log("Call to move took " + (t1 - t0) + " milliseconds.")
-            }, 12);
+                //var t1 = performance.now()
+                //console.log("Call to move took " + (t1 - t0) + " milliseconds.")
+            }, 10);
         }
      }
 }
@@ -293,7 +297,7 @@ function dataUpdater() {
 function startMotion(body_array) {
     if(runOrbits) {
         moveBodies(body_array)
-        minutes += 1
+        seconds += granularity
     }
 }
 
@@ -303,7 +307,7 @@ function moveBodies(body_array) {
     var allForces = sumForces(body_array);
 
     for (let i = 0; i < body_array.length; i++) {
-        updatePosition(allForces[i].Fx, allForces[i].Fy, allForces[i].Fz, body_array[i], 60)      
+        updatePosition(allForces[i].Fx, allForces[i].Fy, allForces[i].Fz, body_array[i], granularity)      
     }   
 }
 
@@ -319,15 +323,15 @@ function calculateForce(body1, body2) {
         z2 =            body2.z,
         xdif =          x2 - x1,
         ydif =          y2 - y1,
-        zdif =         z2 - z1,
+        zdif =          z2 - z1,
         distance2d =    Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2)), .5),
         distance =      Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2) + Math.pow((zdif), 2)), .5),
         theta =         Math.atan2(ydif, xdif),
         phi =           Math.atan2(zdif, distance2d),
         GravConst =     6.67408 * Math.pow(10, -11),
         Fmag =          m1 * m2 * GravConst / (distance * distance),
-        Fx =            Fmag * Math.cos(theta)
-        Fy =            Fmag * Math.sin(theta)
+        Fx =            Fmag * Math.cos(theta),
+        Fy =            Fmag * Math.sin(theta),
         Fz =            Fmag * Math.sin(phi)
     return [Fx, Fy, Fz]
 }
@@ -353,20 +357,27 @@ return universalForceArray;
 }
 
 function updatePosition(Fx, Fy, Fz, body, dt) {
-    var mass = body.mass,
-        ddx = Fx / mass,
-        ddy = Fy / mass;
-        ddz = Fz / mass;
-
-    //add the accelertation * time component
-    body.dx = body.dx + ddx * dt
-    body.dy = body.dy + ddy * dt
-    body.dz = body.dz + ddz * dt
+    
+    // this is a very crude implimentation of special relativity
+    // should however prevent bodies from moving too fast, which is mostly the goal
+    var velocityMag = Math.pow((body.dx * body.dx + body.dy * body.dy + body.dz * body.dz), .5)
+        relativeMass = body.mass / Math.pow((1 - (velocityMag * velocityMag / ( 8.98755179 * Math.pow(10, 16)))) , .5) ,
+        ddx = Fx / relativeMass,
+        ddy = Fy / relativeMass;
+        ddz = Fz / relativeMass;
 
     body.x = body.x + body.dx * dt + .5 * ddx * Math.pow(dt, 2)
     body.y = body.y + body.dy * dt + .5 * ddy * Math.pow(dt, 2)
     body.z = body.z + body.dz * dt + .5 * ddz * Math.pow(dt, 2)
+
+    // find the new velocity at this new position position
+    // this used to be done before the position equation, 
+    // I believe that was an error...
+    body.dx = body.dx + ddx * dt
+    body.dy = body.dy + ddy * dt
+    body.dz = body.dz + ddz * dt
 }
+
 
 function renderObjects(body_array) {
 
@@ -443,7 +454,7 @@ function renderObjects(body_array) {
     }
 
     if (linesOn) {
-        var orbitPath = d3.line()
+        var orbitPath = d3.line().curve(d3.curveCardinal)
         .x(function(d) { return x(d[0]);})
         .y(function(d) { return y(d[1]);});
 
@@ -458,7 +469,7 @@ function renderObjects(body_array) {
 		.attr("stroke-width", 1);
     }
    
-    var circles = svg.selectAll("foo")
+    var circles = svg.selectAll("circle")
         .data(body_array)
         .enter()
         .append("circle")
@@ -470,13 +481,12 @@ function renderObjects(body_array) {
         .attr("id", function(d) { return (d.name);})
         .attr("class", "planet")
 
-    document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( minutes / 1440 ) } </p><p style="{color: "white";}"> Total Years: ${Math.floor( (minutes / 525600 ) ) } </p>`
+    document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( seconds / 86400 ) } </p><p style="{color: "white";}"> Total Years: ${Math.floor( (seconds / 31556952) ) } </p>`
 }
 
 //allows panning of the map
 var xOffset = 0;
 var yOffset = 0;
-
 var xPos = null;
 var xPosOld = null;
 var yPos = null;

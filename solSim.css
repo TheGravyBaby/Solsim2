@@ -18,9 +18,6 @@ text {
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
-.planet {
-    cursor: pointer;
-}
 
 line {
     stroke: rgb(31, 31, 31);

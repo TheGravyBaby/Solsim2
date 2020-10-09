@@ -10,6 +10,20 @@
 <div id="map"></div>
 <div class = "sideMenu">
     <h2>Welcome to Sol Sim!</h2>
+ 
+    <label for="granularity"><b>Select Calculation Granularity</b></label><br>
+    <select id="granularity" label="Granularity" class = "listBox" onchange="changeGranularity()">
+        <option value = "1">1 Second</option>
+        <option value = "5">5 Seconds</option>
+        <option value = "30">30 Seconds</option>
+        <option value = "60" selected="selected" >1 Minute</option>
+        <option value = "300">5 Minutes</option>
+        <option value = "1800">30 Minutes</option>
+        <option value = "3600">1 Hour</option>
+        <!-- <option value = "43200" >12 Hours</option>
+        <option value = "86400">1 Day</option>
+        <option value = "2592000">1 Month</option> -->
+    </select><br><br>
 
     <label for="bodyList"><b>Select a Body</b></label><br>
     <select id="bodyList" label="Body List" class = "listBox" onchange="populateTable()"></select><br><br>
