@@ -25,7 +25,7 @@ line {
 
 .sideMenu {
     position: fixed;
-    width: 16%;
+    width: 300px;
     height: 100%;
     background-color: rgb(190, 190, 190);
     text-align: center;
