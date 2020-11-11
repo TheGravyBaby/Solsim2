@@ -174,7 +174,7 @@ var scale = 4500;
 var granularity = 60;
 
 render = setInterval(function(){renderObjects(solArray)}, 42);
-renderLines = setInterval(function(){populateLines()}, 300);
+renderLines = setInterval(function(){populateLines()}, 84);
 updateFields = setInterval(function(){dataUpdater()}, 500);
 
 
@@ -469,7 +469,7 @@ function renderObjects(body_array) {
     }
 
     if (linesOn) {
-        var orbitPath = d3.line().curve(d3.curveCardinal)
+        var orbitPath = d3.line()
         .x(function(d) { return x(d[0]);})
         .y(function(d) { return y(d[1]);});
 
@@ -546,18 +546,22 @@ document.addEventListener('wheel', function(e) {
     zoom(e);
 }, { passive: false });
 
-function zoom(event) {
+function zoom(e) {
 
-    if (event.deltaY < 0 && scale >= 11) {
-        scale =  scale + (event.deltaY / 10);
+    // if zooming in but we're already very zoomed, go slow
+    if (e.deltaY < 0 && scale >= 22) {
+        scale =  scale - 20;
     }
 
-    if (event.deltaY < 0 && scale >= 200) {
-        scale =  scale + (event.deltaY);
+    // default zoom in
+    if (e.deltaY < 0 && scale >= 200) {
+        scale =  scale - 180;
 
     }
-    if (event.deltaY > 0 && scale <= 10100) {
-        scale =  scale + (event.deltaY);
+
+    // default zoom out, can't go past scale max
+    if (e.deltaY > 0 && scale <= 20100) {
+        scale =  scale + 500;
     }
 }
 
