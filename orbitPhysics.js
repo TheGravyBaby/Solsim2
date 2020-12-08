@@ -440,6 +440,54 @@ function renderObjects(body_array) {
         .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
         .range([height - yMargin, yMargin]);
 
+        if (gridOn) {
+            // gridlines in x axis function
+            function make_x_gridlines() {
+                return d3.axisBottom(x)
+                    .ticks(16)
+            }
+    
+            // gridlines in y axis function
+            function make_y_gridlines() {
+                return d3.axisLeft(y)
+                    .ticks(10)
+            }
+    
+            // add the X gridlines
+            svg.append("g")
+                .attr("class", "grid")
+                .attr("transform", "translate(0," + (height) + ")")
+                .call(make_x_gridlines()
+                .tickSize(-height)
+                .tickFormat("")
+                )
+    
+            // add the Y gridlines
+            svg.append("g")
+                .attr("class", "grid")
+                .call(make_y_gridlines()
+                .tickSize(-width)
+                .tickFormat(""))
+    
+            // Add scales to axis
+            var xAxis = d3.axisBottom(x).ticks(16)
+                .tickFormat(function (d) {
+                    return d / 1000000000 +"Gm";
+                });
+    
+    
+            var yAxis = d3.axisRight(y).ticks(10)
+                .tickFormat(function (d) {
+                    return d / 1000000000 +"Gm";
+                });
+    
+            svg.append("g")
+                .call(yAxis);
+    
+            svg.append("g")
+                .call(xAxis);
+        }
+
     if (vectorsOn) {
         var vectorLines = svg.selectAll("arrows")
         .data(body_array)
@@ -466,53 +514,7 @@ function renderObjects(body_array) {
         .attr("id", function(d) { return (d.name + "_vector");})
     }
 
-    if (gridOn) {
-        // gridlines in x axis function
-        function make_x_gridlines() {
-            return d3.axisBottom(x)
-                .ticks(16)
-        }
-
-        // gridlines in y axis function
-        function make_y_gridlines() {
-            return d3.axisLeft(y)
-                .ticks(10)
-        }
-
-        // add the X gridlines
-        svg.append("g")
-            .attr("class", "grid")
-            .attr("transform", "translate(0," + (height) + ")")
-            .call(make_x_gridlines()
-            .tickSize(-height)
-            .tickFormat("")
-            )
-
-        // add the Y gridlines
-        svg.append("g")
-            .attr("class", "grid")
-            .call(make_y_gridlines()
-            .tickSize(-width)
-            .tickFormat(""))
-
-        // Add scales to axis
-        var xAxis = d3.axisBottom(x).ticks(16)
-            .tickFormat(function (d) {
-                return d / 1000000000 +"Gm";
-            });
-
-
-        var yAxis = d3.axisRight(y).ticks(10)
-            .tickFormat(function (d) {
-                return d / 1000000000 +"Gm";
-            });
-
-        svg.append("g")
-            .call(yAxis);
-
-        svg.append("g")
-            .call(xAxis);
-    }
+    
 
     if (linesOn) {
         var orbitPath = d3.line()
