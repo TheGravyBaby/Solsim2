@@ -26,7 +26,7 @@ line {
 
 #velocityVector {
     stroke: rgb(255, 0, 0);
-    stroke-width: 2px;
+    stroke-width: 1px;
 }
 
 #velocityVector.arrow-right:after {
@@ -72,14 +72,14 @@ line {
 .formbutton {
     display: inline-block;
     background-color: rgb(60, 60, 60);
-    border: 2px;
+    border: 1px;
     border-style: solid;
     color: rgb(241, 241, 241);
     border-radius: 2px 2px 2px 2px;
     padding: 6px 12px;
     text-align: center;
     text-decoration: bold;
-    font-size: 14px;
+    font-size: 12px;
     margin: 4px 2px;
     cursor: pointer;
     font-weight: bold;
@@ -88,7 +88,7 @@ line {
 
 .formbuttonbig {
     background-color: rgb(60, 60, 60);
-    border: 2px;
+    border: 1px;
     border-style: solid;
     color: rgb(241, 241, 241);
     border-color: rgb(52, 52, 52);
@@ -98,7 +98,7 @@ line {
     text-align: center;
     text-decoration: bold;
     display: inline-block;
-    font-size: 26px;
+    font-size: 20px;
     margin: 4px 2px;
     cursor: pointer;
     font-weight: bold;

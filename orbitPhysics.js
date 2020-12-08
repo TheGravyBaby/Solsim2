@@ -440,9 +440,31 @@ function renderObjects(body_array) {
         .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
         .range([height - yMargin, yMargin]);
 
-    // var diameterScale = d3.scaleLinear()
-    //     .domain([0, 1.25 * mapScale])
-    //     .range([0, height - yMargin]); 
+    if (vectorsOn) {
+        var vectorLines = svg.selectAll("arrows")
+        .data(body_array)
+        .enter()        
+        .append("line")
+        .attr("id", "velocityVector")
+        .attr("x1", d => x(d.x))     
+        .attr("y1", d => y(d.y))      
+        .attr("x2", d => x(d.x + (d.dx * 86400 * 8)))     
+        .attr("y2", d => y(d.y + (d.dy * 86400 * 8)))
+
+
+    var rectangles = svg.selectAll("rectangles")
+        .data(body_array)
+        .enter()
+        .append("rect")
+
+    rectangles.attr("x", d => x(d.x + (d.dx * 86400 * 8)) - 2)
+        .attr("y", d => y(d.y + (d.dy * 86400 * 8)) -2)
+        .attr("stroke", "red")
+        .attr("fill", "red")
+        .attr("width", 4)
+        .attr("height", 4)
+        .attr("id", function(d) { return (d.name + "_vector");})
+    }
 
     if (gridOn) {
         // gridlines in x axis function
@@ -508,7 +530,7 @@ function renderObjects(body_array) {
 		.attr("stroke-width", 1);
     }
    
-    var circles = svg.selectAll("circle")
+    var circles = svg.selectAll("bodies")
         .data(body_array)
         .enter()
         .append("circle")
@@ -520,24 +542,9 @@ function renderObjects(body_array) {
         .attr("id", function(d) { return (d.name);})
         .attr("class", "planet")
 
-    if (vectorsOn) {
-        var arrows = svg.selectAll("arrows")
-        .data(body_array)
-        .enter()        
-        .append("line")
-        .attr("id", "velocityVector")
-        .attr("x1", d => x(d.x))     
-        .attr("y1", d => y(d.y))      
-        .attr("x2", d => x(d.x + (d.dx * 86400 * 2)))     
-        .attr("y2", d => y(d.y + (d.dy * 86400 * 2)))
-        .style('marker-end', 'url(#arrow)')
-    }
-    
 
     document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( seconds / 86400 ) } </p><p style="{color: "white";}"> Total Years: ${Math.floor( (seconds / 31556952) ) } </p>`
 }
-
-
 
 //allows panning of the map
 var xOffset = 0;
