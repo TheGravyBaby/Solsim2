@@ -1,13 +1,22 @@
 var seconds = 0;
 var runOrbits = false;
 var hasRun = false;
-var lineArray = []
 
-//positions will be updated with nasa data
+//simple SolSim Improvements
+
+// 1. make fields take proper values and change properly
+// 2. update UI to be a bit more intuitive and good looking
+// 3. add save states, should be able to load a solar system json object
+// 4. add draggabiliy, no one wants to fiddle fuck with numbers
+// 5. add arrows for speed
+// 6. add planet sizability
+// 7. add collisions 
+
 var solArray = [
     {
         "name": "Sun",
-        "size": 10,
+        "pixelSize": 10,
+        "diameter": 695000 * Math.pow(10, 3),
         "color": "orange",
         "x": -7.582243850428136 * Math.pow(10, 5) * 1000,                                                                 
         "y": 1.049352731119007 * Math.pow(10, 6) * 1000,
@@ -22,7 +31,8 @@ var solArray = [
 
     {
         "name": "Mercury",
-        "size": 3,
+        "pixelSize": 3,
+        "diameter": 4879 * Math.pow(10, 3),
         "color": "grey",
         "x": -5.937556658360244 * Math.pow(10, 7) * 1000,                                        
         "y": -1.908052824719750 * Math.pow(10, 7) * 1000,
@@ -37,7 +47,8 @@ var solArray = [
 
     {
         "name": "Venus",
-        "size": 4,
+        "pixelSize": 4,
+        "diameter": 12.1 * Math.pow(10, 6),
         "color": "sandybrown",
         "x": -3.261035038530476 * Math.pow(10, 7) * 1000,                                        
         "y": -1.027595075697591 * Math.pow(10, 8) * 1000,
@@ -52,7 +63,8 @@ var solArray = [
 
     {
         "name": "Earth",
-        "size": 4,
+        "pixelSize": 4,
+        "diameter": 12.7 * Math.pow(10, 6),
         "color": "lightblue",
         "x": -4.489719402109592 * Math.pow(10, 7) * 1000,                                        
         "y": -1.441434564423431 * Math.pow(10, 8) * 1000,
@@ -67,7 +79,8 @@ var solArray = [
 
     {
         "name": "Moon",
-        "size": 2,
+        "pixelSize": 2,
+        "diameter": 3.4 * Math.pow(10, 6),
         "color": "grey",
         "x": -4.516792620118394 * Math.pow(10, 7) * 1000,                                        
         "y": -1.443861999156687 * Math.pow(10, 8) * 1000,
@@ -82,7 +95,8 @@ var solArray = [
 
     {
         "name": "Mars",
-        "size": 3,
+        "pixelSize": 3,
+        "diameter": 6.7 * Math.pow(10, 6),
         "color": "red",
         "x": 9.777993347253025 * Math.pow(10, 7) * 1000,                                        
         "y": -1.848513174329408 * Math.pow(10, 8) * 1000,
@@ -97,7 +111,8 @@ var solArray = [
 
     {
         "name": "Jupiter",
-        "size": 7,
+        "pixelSize": 7,
+        "diameter": 142.9 * Math.pow(10, 6),
         "color": "brown",
         "x": 2.461575712591664 * Math.pow(10, 8) * 1000,                                        
         "y": -7.320378301099460 * Math.pow(10, 8) * 1000,
@@ -112,7 +127,8 @@ var solArray = [
 
     {
         "name": "Saturn",
-        "size": 6,
+        "pixelSize": 6,
+        "diameter": 120.5 * Math.pow(10, 6),
         "color": "DARKSALMON",
         "x": 6.775744982875707 * Math.pow(10, 8) * 1000,                                        
         "y": -1.335134690125010 * Math.pow(10, 9) * 1000,
@@ -127,7 +143,8 @@ var solArray = [
 
     {
         "name": "Uranus",
-        "size": 5,
+        "pixelSize": 5,
+        "diameter": 50.7 * Math.pow(10, 6),
         "color": "lightblue",
         "x": 2.372741712986109 * Math.pow(10, 9) * 1000,                                        
         "y": 1.772776410626363 * Math.pow(10, 9) * 1000,
@@ -142,7 +159,8 @@ var solArray = [
 
     {
         "name": "Neptune",
-        "size": 5,
+        "pixelSize": 5,
+        "diameter": 49.2 * Math.pow(10, 6),
         "color": "blue",
         "x": 4.388455206690246 * Math.pow(10, 9) * 1000,                                        
         "y": -8.799545972618895 * Math.pow(10, 8) * 1000,
@@ -157,7 +175,8 @@ var solArray = [
 
     {
         "name": "Pluto",
-        "size": 2,
+        "pixelSize": 2,
+        "diameter": 1.48 * Math.pow(10, 6),
         "color": "grey",
         "x": 2.009235744867388 * Math.pow(10, 9) * 1000,                                        
         "y": -4.679083593987942 * Math.pow(10, 9) * 1000,
@@ -173,6 +192,7 @@ var solArray = [
 var scale = 4500;
 var granularity = 60;
 
+//renderObjects(solArray)
 render = setInterval(function(){renderObjects(solArray)}, 42);
 renderLines = setInterval(function(){populateLines()}, 84);
 updateFields = setInterval(function(){dataUpdater()}, 500);
@@ -211,7 +231,7 @@ function populateTable() {
     var body = $('#bodyList').prop('selectedIndex')
 
     $('#bodyName').empty().append(solArray[body].name)
-    $('#bodyRadius').empty().append(solArray[body].size)
+    $('#bodyRadius').empty().append(solArray[body].pixelSize)
     $('#bodyMass').empty().append(solArray[body].mass)
     $('#bodyColor').empty().append(solArray[body].color)
     $('#bodyX').empty().append(solArray[body].x)
@@ -229,7 +249,7 @@ function updateSystem() {
     var name = $('#bodyName').val();
 
     solArray[body].name = $('#bodyName').val();
-    solArray[body].size = Number($('#bodyRadius').val());
+    solArray[body].pixelSize = Number($('#bodyRadius').val());
     solArray[body].mass = Number($('#bodyMass').val())
     solArray[body].color = $('#bodyColor').val();
     solArray[body].x = Number($('#bodyX').val());
@@ -247,7 +267,7 @@ function addBody() {
     solArray.push(
         {
             "name": "NewBody",
-            "size": 8,
+            "pixelSize": 8,
             "color": "yellow",
             "x": 549200000 * Math.pow(10, 3),                                                                 
             "y": 549200000 * Math.pow(10, 3),
@@ -404,7 +424,7 @@ function renderObjects(body_array) {
     var height = $(window).height();
     var xMargin = 64;
     var yMargin = 40;
-    var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
+    var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune, 45 trillion meters, or 4500 billion meters
 
     d3.select("#map").selectAll("svg").remove();
 
@@ -419,6 +439,10 @@ function renderObjects(body_array) {
     var y = d3.scaleLinear()
         .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
         .range([height - yMargin, yMargin]);
+
+    // var diameterScale = d3.scaleLinear()
+    //     .domain([0, 1.25 * mapScale])
+    //     .range([0, height - yMargin]); 
 
     if (gridOn) {
         // gridlines in x axis function
@@ -473,7 +497,7 @@ function renderObjects(body_array) {
         .x(function(d) { return x(d[0]);})
         .y(function(d) { return y(d[1]);});
 
-    var bodyPath =  svg.selectAll("boo")
+    var bodyPath =  svg.selectAll("foo")
         .data(body_array)
         .enter()
         .append("path")
@@ -491,13 +515,29 @@ function renderObjects(body_array) {
 
     circles.attr("cx", function(d) { return x(d.x);})
         .attr("cy", function(d) { return y(d.y);})
-        .attr("r", function(d) { return (d.size);})
+        .attr("r", function(d) { return (d.pixelSize);})
         .attr("fill", function(d) { return (d.color);})
         .attr("id", function(d) { return (d.name);})
         .attr("class", "planet")
 
+    if (vectorsOn) {
+        var arrows = svg.selectAll("arrows")
+        .data(body_array)
+        .enter()        
+        .append("line")
+        .attr("id", "velocityVector")
+        .attr("x1", d => x(d.x))     
+        .attr("y1", d => y(d.y))      
+        .attr("x2", d => x(d.x + (d.dx * 86400 * 2)))     
+        .attr("y2", d => y(d.y + (d.dy * 86400 * 2)))
+        .style('marker-end', 'url(#arrow)')
+    }
+    
+
     document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( seconds / 86400 ) } </p><p style="{color: "white";}"> Total Years: ${Math.floor( (seconds / 31556952) ) } </p>`
 }
+
+
 
 //allows panning of the map
 var xOffset = 0;
@@ -506,15 +546,53 @@ var xPos = null;
 var xPosOld = null;
 var yPos = null;
 var yPosOld = null;
-let isPanning = false;
+var isPanning = false;
+var gotBody = false;
+var targetBody = "";
+
 const viewer = document.getElementById('map');
 
+function dragBody(bodyname, e) {
+
+    var width = $(window).width() * .85;
+    var height = $(window).height();
+    var xMargin = 64;
+    var yMargin = 40;
+    var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
+
+    var X = e.offsetX;
+    var Y = e.offsetY;
+
+    // these are the inverse of our render scales, we want to go from pixels to meters
+    var xScale = d3.scaleLinear()
+        .domain([xMargin, width - xMargin])
+        .range([-mapScale - xOffset * scale * Math.pow(10, 6) , mapScale - xOffset * scale * Math.pow(10, 6)]);
+
+    var yScale = d3.scaleLinear()
+        .domain([height - yMargin, yMargin])
+        .range([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
+
+
+    solArray.find(item=>item.name==bodyname).x = xScale(X);
+    solArray.find(item=>item.name==bodyname).y = yScale(Y);
+
+}
+
 viewer.addEventListener('mousedown', e => {
-    isPanning = true;
+    
+    if ($(e.target).hasClass('planet')) {
+        gotBody = true;
+        targetBody = e.target.id;
+        console.log(targetBody);
+    }
+    else {
+        isPanning = true;
+    }
+
   });
 
 viewer.addEventListener('mousemove', e => {
-    if (isPanning === true && xPosOld != null) {
+    if (isPanning && xPosOld != null) {
         xPos = e.offsetX ;
         yPos = e.offsetY;
         xOffset += (xPos - xPosOld)
@@ -524,15 +602,21 @@ viewer.addEventListener('mousemove', e => {
         xPosOld = e.offsetX;
         yPosOld = e.offsetY;
     }
-    else {
+    else if (isPanning) {
         xPosOld = e.offsetX;
         yPosOld = e.offsetY;
     }
+
+    if (gotBody) {
+        dragBody(targetBody, e)
+    }
+
   });
 
   viewer.addEventListener('mouseup', e => {
-    if (isPanning === true) {
+    if (isPanning || gotBody) {
         isPanning = false;
+        gotBody = false;
         xPos = null;
         xPosOld = null;
         yPos = null;
@@ -583,6 +667,14 @@ function focusBody() {
 
     xOffset = -1 * solArray[body].x / (scale * Math.pow(10, 6))
     yOffset = solArray[body].y / (scale * Math.pow(10, 6))
+}
+
+var vectorsOn
+function toggleVectors() {
+    if (!vectorsOn)
+        vectorsOn = true;
+    else
+        vectorsOn = false;
 }
 
 function centerCamera() {
