@@ -10,32 +10,14 @@
 <div id="map"></div>
 <div class = "sideMenu">
      
-    <label for="granularity"><b>Select Calculation Granularity</b></label><br>
-    <select id="granularity" label="Granularity" class = "listBox" onchange="changeGranularity()">
-        <option value = "1">1 Second</option>
-        <option value = "5">5 Seconds</option>
-        <option value = "30">30 Seconds</option>
-        <option value = "60" selected="selected" >1 Minute</option>
-        <option value = "300">5 Minutes</option>
-        <option value = "1800">30 Minutes</option>
-        <option value = "3600">1 Hour</option>
-        <!-- <option value = "43200" >12 Hours</option>
-        <option value = "86400">1 Day</option>
-        <option value = "2592000">1 Month</option> -->
-    </select><br><br>
+    
 
     <label for="bodyList"><b>Select a Body</b></label><br>
-    <select id="bodyList" label="Body List" class = "listBox" onchange="populateTable()"></select><br><br>
+    <select id="bodyList" label="Body List" class = "listBox" onchange="populateTable()"></select><br>
 
     <button id="addPlanet" class="formbutton" onclick="addBody()">Add Body</button>
     <button id="removePlanet" class="formbutton" onclick="deleteBody()">Remove Body</button>
-    <button id="updateBody" class="formbutton" onclick="updateSystem()">Update Body</button>
-    <button id="focusBody" class="formbutton" onclick="toggleGrid()">Toggle Grid</button>
-    <button id="focusBody" class="formbutton" onclick="focusButton()">Focus Body</button>
-    <button id="focusBody" class="formbutton" onclick="centerCamera()">Recenter</button>
-    <button id="toggleLines" class="formbutton" onclick="toggleLines()">Toggle Paths</button>
-    <button id="toggleVectors" class="formbutton" onclick="toggleVectors()">Toggle Vectors</button>
-
+    <!-- <button id="updateBody" class="formbutton" onclick="updateSystem()">Update Body</button> -->
     <br>
 
     <table id="propertiesTable">
@@ -94,7 +76,28 @@
 
     </table>
 
-    <button onclick="startStop()" class="formbuttonbig">Start / Stop</button>
+    <!-- <button id="toggleGrid" class="formbutton" onclick="toggleGrid()">Toggle Grid</button> -->
+    <button id="focusBody" class="formbutton" onclick="focusButton()">Focus Body</button>
+    <button id="focusBody" class="formbutton" onclick="centerCamera()">Recenter</button>
+    <button id="toggleLines" class="formbutton" onclick="toggleLines()">Toggle Paths</button>
+    <button id="toggleVectors" class="formbutton" onclick="toggleVectors()">Toggle Vectors</button><br><br>
+
+    <button onclick="startStop()" class="formbuttonbig">Start / Stop</button><br><br>
+
+    <label for="granularity"><b>Calculation Granularity</b></label><br>
+    <select id="granularity" label="Granularity" class = "listBox" onchange="changeGranularity()">
+        <option value = "1">1 Second</option>
+        <option value = "5">5 Seconds</option>
+        <option value = "30">30 Seconds</option>
+        <option value = "60" selected="selected" >1 Minute</option>
+        <option value = "300">5 Minutes</option>
+        <option value = "1800">30 Minutes</option>
+        <option value = "3600">1 Hour</option>
+        <!-- <option value = "43200" >12 Hours</option>
+        <option value = "86400">1 Day</option>
+        <option value = "2592000">1 Month</option> -->
+    </select><br>
+
     <div id="counter"></div>
 
 </div>

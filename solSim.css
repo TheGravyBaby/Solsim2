@@ -53,8 +53,9 @@ line {
 
 
 .textbox {
-    width: 180px;
+    width: 160px;
     height: 16px;
+    margin: 1px;
     resize: none;
     background-color: rgb(60, 60, 60);
     color: rgb(241, 241, 241);

@@ -1,9 +1,3 @@
-var seconds = 0;
-var runOrbits = false;
-var hasRun = false;
-
-//simple SolSim Improvements
-
 // 1. make fields take proper values and change properly
 // 2. update UI to be a bit more intuitive and good looking
 // 3. add save states, should be able to load a solar system json object
@@ -191,12 +185,14 @@ var solArray = [
 ];
 var scale = 4500;
 var granularity = 60;
+var seconds = 0;
+var runOrbits = false;
+var hasRun = false;
 
 //renderObjects(solArray)
 render = setInterval(function(){renderObjects(solArray)}, 42);
 renderLines = setInterval(function(){populateLines()}, 84);
-updateFields = setInterval(function(){dataUpdater()}, 500);
-
+updateFields = setInterval(function(){dataUpdater()}, 1000);
 
 function populateBodyList() {
     $('#bodyList').empty()
@@ -214,32 +210,54 @@ function changeGranularity() {
 };
 
 function populateLines() {
-    
-    for (let i = 0; i < solArray.length; i++) {
-        if (solArray[i].lines.length < 1000) {
-            solArray[i].lines.push([solArray[i].x, solArray[i].y, solArray[i].z])
+   
+    if (runOrbits) {
+        for (let i = 0; i < solArray.length; i++) {
+            if (solArray[i].lines.length < 1000) {
+                solArray[i].lines.push([solArray[i].x, solArray[i].y, solArray[i].z])
+            }
+            else {
+                solArray[i].lines.shift()
+                solArray[i].lines.push([solArray[i].x, solArray[i].y, , solArray[i].z])
+            }
         }
-        else {
-            solArray[i].lines.shift()
-            solArray[i].lines.push([solArray[i].x, solArray[i].y, , solArray[i].z])
-        }
+        //console.log(solArray)
     }
-    //console.log(solArray)
 }
 
 function populateTable() {
     var body = $('#bodyList').prop('selectedIndex')
+    
+    // if the user is in the field, don't change the field...
+    if (!($("#bodyName").is(":focus")))
+        $('#bodyName').val(solArray[body].name)
 
-    $('#bodyName').empty().append(solArray[body].name)
-    $('#bodyRadius').empty().append(solArray[body].pixelSize)
-    $('#bodyMass').empty().append(solArray[body].mass)
-    $('#bodyColor').empty().append(solArray[body].color)
-    $('#bodyX').empty().append(solArray[body].x)
-    $('#bodyY').empty().append(solArray[body].y)
-    $('#bodyZ').empty().append(solArray[body].z)
-    $('#bodydX').empty().append(solArray[body].dx)
-    $('#bodydY').empty().append(solArray[body].dy)
-    $('#bodydZ').empty().append(solArray[body].dz)
+    if (!($("#bodyRadius").is(":focus"))) 
+        $('#bodyRadius').val(solArray[body].pixelSize)
+
+    if (!($("#bodyMass").is(":focus")))
+        $('#bodyMass').val(solArray[body].mass)
+
+    if (!($("#bodyColor").is(":focus")))
+        $('#bodyColor').val(solArray[body].color)
+
+    if (!($("#bodyX").is(":focus")))
+        $('#bodyX').val(solArray[body].x)
+
+    if (!($("#bodyY").is(":focus")))
+        $('#bodyY').val(solArray[body].y)
+
+    if (!($("#bodyZ").is(":focus")))
+        $('#bodyZ').val(solArray[body].z)
+
+    if (!($("#bodydX").is(":focus")))
+        $('#bodydX').val(solArray[body].dx)
+
+    if (!($("#bodydY").is(":focus")))
+        $('#bodydY').val(solArray[body].dy)
+
+    if (!($("#bodydZ").is(":focus")))
+        $('#bodydZ').val(solArray[body].dz)
 }
 
 populateTable()
@@ -249,15 +267,32 @@ function updateSystem() {
     var name = $('#bodyName').val();
 
     solArray[body].name = $('#bodyName').val();
-    solArray[body].pixelSize = Number($('#bodyRadius').val());
-    solArray[body].mass = Number($('#bodyMass').val())
+
+    if (($.isNumeric(   $('#bodyRadius').val()   )))
+        solArray[body].pixelSize = Number($('#bodyRadius').val());
+
+    if (($.isNumeric(   $('#bodyMass').val()   )))
+        solArray[body].mass = Number($('#bodyMass').val())
+
     solArray[body].color = $('#bodyColor').val();
-    solArray[body].x = Number($('#bodyX').val());
-    solArray[body].y = Number($('#bodyY').val());
-    solArray[body].z = Number($('#bodyZ').val());
-    solArray[body].dx = Number($('#bodydX').val());
-    solArray[body].dy = Number($('#bodydY').val());
-    solArray[body].dz = Number($('#bodydZ').val());
+
+    if (($.isNumeric(   $('#bodyX').val()   )))
+        solArray[body].x = Number($('#bodyX').val());
+
+    if (($.isNumeric(   $('#bodyY').val()   )))    
+        solArray[body].y = Number($('#bodyY').val());
+
+    if (($.isNumeric(   $('#bodyZ').val()   )))
+        solArray[body].z = Number($('#bodyZ').val());
+
+    if (($.isNumeric(   $('#bodydX').val()   )))
+        solArray[body].dx = Number($('#bodydX').val());
+
+    if (($.isNumeric(   $('#bodydY').val()   )))
+        solArray[body].dy = Number($('#bodydY').val());
+
+    if (($.isNumeric(   $('#bodydZ').val()   )))
+        solArray[body].dz = Number($('#bodydZ').val());
 
     populateBodyList();
     $("#bodyList").val(name);
@@ -285,6 +320,32 @@ function addBody() {
     console.log(solArray)
 }
 
+function enableFields() {
+    $('#bodyName').removeAttr('disabled');
+    $('#bodyRadius').removeAttr('disabled');
+    $('#bodyMass').removeAttr('disabled');
+    $('#bodyColor').removeAttr('disabled');
+    $('#bodyX').removeAttr('disabled');
+    $('#bodyY').removeAttr('disabled');
+    $('#bodyZ').removeAttr('disabled');
+    $('#bodydX').removeAttr('disabled');
+    $('#bodydY').removeAttr('disabled');
+    $('#bodydZ').removeAttr('disabled');
+}
+
+function disableFields() {
+    $('#bodyName').attr('disabled', 'disabled')
+    $('#bodyRadius').attr('disabled', 'disabled')
+    $('#bodyMass').attr('disabled', 'disabled')
+    $('#bodyColor').attr('disabled', 'disabled')
+    $('#bodyX').attr('disabled', 'disabled')
+    $('#bodyY').attr('disabled', 'disabled')
+    $('#bodyZ').attr('disabled', 'disabled')
+    $('#bodydX').attr('disabled', 'disabled')
+    $('#bodydY').attr('disabled', 'disabled')
+    $('#bodydZ').attr('disabled', 'disabled')
+}
+
 function deleteBody() {
     // clearInterval(render)
     // clearInterval(updateFields)
@@ -301,10 +362,16 @@ function startStop() {
         runOrbits = false;
         populateTable()
         console.log("STOPPED")
+        enableFields()
+       
      }
 
      else {
         console.log("START")
+
+        // when we start, we dont want the user to edit these fields, only when paused
+        disableFields()
+
         runOrbits = true;
         startMotion(solArray)
         if (!hasRun) {
@@ -323,10 +390,13 @@ function startStop() {
      }
 }
 
-function dataUpdater() {
-    if(runOrbits) {
-        populateTable()
-    }
+function dataUpdater() {  
+    populateTable()
+    
+    // don't want to push textbox values to the array if we dont have to, could cause some calc async problems
+    // also if the user is editng the field and we send mid edit, while oribiting, will fuck shit up
+    if (!runOrbits)
+        updateSystem()
 }
 
 function startMotion(body_array) {
@@ -371,7 +441,7 @@ function calculateForce(body1, body2) {
     return [Fx, Fy, Fz]
 }
 
-//not very efficient, as we'll be doing this for every planet, and redoing a few calculations multiple times but its okay 
+// not very efficient, as we'll be doing this for every planet, and redoing a few calculations multiple times but its okay 
 function sumForces(body_array) {
     universalForceArray = [];
     for (i=0; i< body_array.length; i++) {
@@ -406,13 +476,10 @@ function updatePosition(Fx, Fy, Fz, body, dt) {
     body.z = body.z + body.dz * dt + .5 * ddz * Math.pow(dt, 2)
 
     // find the new velocity at this new position position
-    // this used to be done before the position equation, 
-    // I believe that was an error...
     body.dx = body.dx + ddx * dt
     body.dy = body.dy + ddy * dt
     body.dz = body.dz + ddz * dt
 }
-
 
 function renderObjects(body_array) {
 
@@ -548,7 +615,8 @@ function renderObjects(body_array) {
     document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( seconds / 86400 ) } </p><p style="{color: "white";}"> Total Years: ${Math.floor( (seconds / 31556952) ) } </p>`
 }
 
-//allows panning of the map
+
+// below is camera and dragging controls
 var xOffset = 0;
 var yOffset = 0;
 var xPos = null;
@@ -585,6 +653,7 @@ function dragBody(bodyname, e) {
     solArray.find(item=>item.name==bodyname).x = xScale(X);
     solArray.find(item=>item.name==bodyname).y = yScale(Y);
 
+    populateTable();
 }
 
 viewer.addEventListener('mousedown', e => {
