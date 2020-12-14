@@ -189,11 +189,6 @@ var seconds = 0;
 var runOrbits = false;
 var hasRun = false;
 
-//renderObjects(solArray)
-render = setInterval(function(){renderObjects(solArray)}, 42);
-renderLines = setInterval(function(){populateLines()}, 84);
-updateFields = setInterval(function(){dataUpdater()}, 1000);
-
 function populateBodyList() {
     $('#bodyList').empty()
     solArray.forEach(element => {
@@ -203,7 +198,6 @@ function populateBodyList() {
             .text(element.name));
     });
 }
-populateBodyList()
 
 function changeGranularity() {
     granularity = Number($('#granularity').val());
@@ -259,8 +253,6 @@ function populateTable() {
     if (!($("#bodydZ").is(":focus")))
         $('#bodydZ').val(solArray[body].dz)
 }
-
-populateTable()
 
 function updateSystem() {
     var body = $('#bodyList').prop('selectedIndex');
@@ -466,7 +458,7 @@ function updatePosition(Fx, Fy, Fz, body, dt) {
     // this is a very crude implimentation of special relativity
     // should however prevent bodies from moving too fast, which is mostly the goal
     var velocityMag = Math.pow((body.dx * body.dx + body.dy * body.dy + body.dz * body.dz), .5)
-        relativeMass = body.mass / Math.pow((1 - (velocityMag * velocityMag / ( 8.98755179 * Math.pow(10, 16)))) , .5) ,
+        relativeMass = body.mass / Math.pow((1 - (velocityMag * velocityMag / ( 8.98755179 * Math.pow(10, 16)))) , .5),
         ddx = Fx / relativeMass,
         ddy = Fy / relativeMass;
         ddz = Fz / relativeMass;
@@ -554,34 +546,7 @@ function renderObjects(body_array) {
             svg.append("g")
                 .call(xAxis);
         }
-
-    if (vectorsOn) {
-        var vectorLines = svg.selectAll("arrows")
-        .data(body_array)
-        .enter()        
-        .append("line")
-        .attr("id", "velocityVector")
-        .attr("x1", d => x(d.x))     
-        .attr("y1", d => y(d.y))      
-        .attr("x2", d => x(d.x + (d.dx * 86400 * 8)))     
-        .attr("y2", d => y(d.y + (d.dy * 86400 * 8)))
-
-
-    var rectangles = svg.selectAll("rectangles")
-        .data(body_array)
-        .enter()
-        .append("rect")
-
-    rectangles.attr("x", d => x(d.x + (d.dx * 86400 * 8)) - 2)
-        .attr("y", d => y(d.y + (d.dy * 86400 * 8)) -2)
-        .attr("stroke", "red")
-        .attr("fill", "red")
-        .attr("width", 4)
-        .attr("height", 4)
-        .attr("id", function(d) { return (d.name + "_vector");})
-    }
-
-    
+ 
 
     if (linesOn) {
         var orbitPath = d3.line()
@@ -611,10 +576,36 @@ function renderObjects(body_array) {
         .attr("id", function(d) { return (d.name);})
         .attr("class", "planet")
 
+        if (vectorsOn) {
+            var vectorLines = svg.selectAll("arrows")
+            .data(body_array)
+            .enter()        
+            .append("line")
+            .attr("id", "velocityVector")
+            .attr("x1", d => x(d.x))     
+            .attr("y1", d => y(d.y))      
+            .attr("x2", d => x(d.x + (d.dx * 864000)))     
+            .attr("y2", d => y(d.y + (d.dy * 864000)))
+    
+    
+        var rectangles = svg.selectAll("rectangles")
+            .data(body_array)
+            .enter()
+            .append("rect")
+    
+        // minus 3 to center the rectangle
+        rectangles.attr("x", d => x(d.x + (d.dx * 864000)) - 3)
+            .attr("y", d => y(d.y + (d.dy * 864000)) - 3)
+            .attr("stroke", "red")
+            .attr("fill", "red")
+            .attr("width", 6)
+            .attr("height", 6)
+            .attr("class", "vector")
+            .attr("id", function(d) { return (d.name + "-vector");})
+        }  
 
     document.getElementById('counter').innerHTML = `<p style="{color: "white";}"> Total Days: ${Math.round( seconds / 86400 ) } </p><p style="{color: "white";}"> Total Years: ${Math.floor( (seconds / 31556952) ) } </p>`
 }
-
 
 // below is camera and dragging controls
 var xOffset = 0;
@@ -625,9 +616,55 @@ var yPos = null;
 var yPosOld = null;
 var isPanning = false;
 var gotBody = false;
+var gotVector = false;
 var targetBody = "";
 
 const viewer = document.getElementById('map');
+
+// oh boy I am lazy, these two functions are mostly the same but lets just get it working and perhaps unify them later
+function dragVector(vectorName, e) {
+    //console.log("Dragging " + vectorName + " vector")
+
+    var width = $(window).width() * .85;
+    var height = $(window).height();
+    var xMargin = 64;
+    var yMargin = 40;
+    var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
+
+    var X = e.offsetX;
+    var Y = e.offsetY;
+
+    // these are the inverse of our render scales, we want to go from pixels to meters
+    var xScale = d3.scaleLinear()
+    .domain([xMargin, width - xMargin])
+    .range([-mapScale - xOffset * scale * Math.pow(10, 6) , mapScale - xOffset * scale * Math.pow(10, 6)]);
+
+    var yScale = d3.scaleLinear()
+    .domain([height - yMargin, yMargin])
+    .range([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
+
+    // I guess this is a good scale
+    solArray.find(item=>item.name==vectorName).dx = (xScale(X) - solArray.find(item=>item.name==vectorName).x) / (864000);
+    solArray.find(item=>item.name==vectorName).dy = (yScale(Y) - solArray.find(item=>item.name==vectorName).y) / (864000);
+
+    // we need to cap the vector, don't want speed of light violations
+    if (solArray.find(item=>item.name==vectorName).dx > 1e6) {
+        solArray.find(item=>item.name==vectorName).dx = 1e6
+    }
+
+    if (solArray.find(item=>item.name==vectorName).dx < -1e6) {
+        solArray.find(item=>item.name==vectorName).dx = -1e6
+    }
+
+    if (solArray.find(item=>item.name==vectorName).dy > 1e6) {
+        solArray.find(item=>item.name==vectorName).dy = 1e6
+    }
+
+    if (solArray.find(item=>item.name==vectorName).dy < -1e6) {
+        solArray.find(item=>item.name==vectorName).dy = -1e6
+    }
+
+}
 
 function dragBody(bodyname, e) {
 
@@ -649,7 +686,6 @@ function dragBody(bodyname, e) {
         .domain([height - yMargin, yMargin])
         .range([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
 
-
     solArray.find(item=>item.name==bodyname).x = xScale(X);
     solArray.find(item=>item.name==bodyname).y = yScale(Y);
 
@@ -661,8 +697,14 @@ viewer.addEventListener('mousedown', e => {
     if ($(e.target).hasClass('planet')) {
         gotBody = true;
         targetBody = e.target.id;
-        console.log(targetBody);
     }
+
+    if ($(e.target).hasClass('vector') && !runOrbits) {
+        gotVector = true;
+        targetBody = (e.target.id).split("-")[0];
+        //console.log(targetBody)
+    }
+
     else {
         isPanning = true;
     }
@@ -689,19 +731,23 @@ viewer.addEventListener('mousemove', e => {
         dragBody(targetBody, e)
     }
 
+    if (gotVector) {
+        dragVector(targetBody, e)
+    }
+
   });
 
-  viewer.addEventListener('mouseup', e => {
-    if (isPanning || gotBody) {
+viewer.addEventListener('mouseup', e => {
+    if (isPanning || gotBody || gotVector) {
         isPanning = false;
         gotBody = false;
+        gotVector = false;
         xPos = null;
         xPosOld = null;
         yPos = null;
         yPosOld = null;
     }
   });
-
 
 document.addEventListener('wheel', function(e) {
     e.preventDefault();
@@ -726,8 +772,6 @@ function zoom(e) {
         scale =  scale + 500;
     }
 }
-
-renderObjects(solArray);
 
 var focusing = false;
 function focusButton() {
@@ -781,3 +825,9 @@ function toggleLines () {
         linesOn = false;
     }
 }
+
+populateBodyList()
+populateTable();
+render = setInterval(function(){renderObjects(solArray)}, 42);
+renderLines = setInterval(function(){populateLines()}, 84);
+updateFields = setInterval(function(){dataUpdater()}, 1000);
