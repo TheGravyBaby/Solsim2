@@ -10,9 +10,13 @@
 <div id="map"></div>
 <div class = "sideMenu">
      
+    <div>
+        <label for="solarSystemlist"><b>Star System</b></label>
+        <select id="solarSystemlist" label="Solar System" class = "listBox" onchange="changeSolarSystem()"></select><br><br>
+    </div>    
     
 
-    <label for="bodyList"><b>Select a Body</b></label><br>
+    <label for="bodyList"><b>Orbital Body</b></label>
     <select id="bodyList" label="Body List" class = "listBox" onchange="populateTable()"></select><br>
 
     <button id="addPlanet" class="formbutton" onclick="addBody()">Add Body</button>
@@ -104,6 +108,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://d3js.org/d3.v5.min.js"></script>
+<script type="text/javascript" src="./systemArrays.js"></script>
 <script type="text/javascript" src="./orbitPhysics.js"></script>
 
 </body>
