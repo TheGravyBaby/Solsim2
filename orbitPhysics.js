@@ -11,6 +11,7 @@ var granularity = 60;
 var seconds = 0;
 var runOrbits = false;
 var hasRun = false;
+var newBodyIndex = 1;
 
 function populateSolarSystemList() {
     $('#solarSystemlist').empty()
@@ -34,6 +35,8 @@ function changeSolarSystem() {
     solArray = universeArray[systemIndex].system;
 
     $('#bodyList option')[0].selected = true;
+    runOrbits = false;
+    seconds = 0;
     populateTable() 
 }
 
@@ -145,7 +148,7 @@ function updateSystem() {
 function addBody() {
     solArray.push(
         {
-            "name": "NewBody",
+            "name": "NewBody"+ newBodyIndex,
             "pixelSize": 8,
             "color": "white",
             "x": 549200000 * Math.pow(10, 3),                                                                 
@@ -159,9 +162,11 @@ function addBody() {
         }
     )
     populateBodyList();
-    $("#bodyList").val("NewBody")
+    var newBodyName = "NewBody" + newBodyIndex
+    $("#bodyList").val(newBodyName)
+    newBodyIndex += 1
     populateTable();
-    console.log(solArray)
+    // console.log(solArray)
 }
 
 function enableFields() {
@@ -197,7 +202,7 @@ function deleteBody() {
     var body = $('#bodyList').prop('selectedIndex')
     solArray.splice(body, 1)
 
-    console.log(solArray)
+    //console.log(solArray)
     populateBodyList();
 }
 
@@ -217,19 +222,26 @@ function startStop() {
         disableFields()
 
         runOrbits = true;
-        startMotion(solArray)
-        if (!hasRun) {
-            hasRun = true;
-            timer = setInterval(function(){
-                //to make sure calculation timing is in line, really pushing the JS stack here to its limit
-                //also use a trick here to force JS to do more calculations than the 1ms interval will allow
-                //var t0 = performance.now()
+        //to make sure calculation timing is in line, really pushing the JS stack here to its limit
+        //also use a trick here to force JS to do more calculations than the 1ms interval will allow
+        var t0 = performance.now()
                 for (var i = 0; i < 500; i++) {
                     startMotion(solArray)
                 }
-                //var t1 = performance.now()
-                //console.log("Call to move took " + (t1 - t0) + " milliseconds.")
-            }, 10);
+        var t1 = performance.now()
+        var timeItTook = t1 - t0
+        console.log(timeItTook)
+
+        // using time it took metric will allow us to ajust for systems of different speeds
+        if (!hasRun) {
+            hasRun = true;
+            timer = setInterval(function(){
+               
+                for (var i = 0; i < 500; i++) {
+                    startMotion(solArray)
+                }
+               
+            }, timeItTook * 1.5);
         }
      }
 }
@@ -251,12 +263,11 @@ function startMotion(body_array) {
 }
 
 function moveBodies(body_array) {
-    //console.log(body_array[0])
-    //console.log(body_array)
+
     var allForces = sumForces(body_array);
 
     for (let i = 0; i < body_array.length; i++) {
-        //console.log(allForces[i].Fx, allForces[i].Fy, allForces[i].Fz) 
+
         updatePosition(allForces[i].Fx, allForces[i].Fy, allForces[i].Fz, body_array[i], granularity)      
     }   
 }
@@ -552,7 +563,7 @@ viewer.addEventListener('mousedown', e => {
     if ($(e.target).hasClass('planet')) {
         gotBody = true;
         targetBody = e.target.id;
-        console.log(targetBody)
+        //console.log(targetBody)
     }
 
     else if ($(e.target).hasClass('vector') && !runOrbits) {
@@ -573,7 +584,7 @@ viewer.addEventListener('mousemove', e => {
         yPos = e.offsetY;
         xOffset += (xPos - xPosOld)
         yOffset += (yPos - yPosOld)
-        console.log("Dragging Offset (" + xOffset  + ", "+ yOffset  + ")")
+        //console.log("Dragging Offset (" + xOffset  + ", "+ yOffset  + ")")
         //console.log(e)
         xPosOld = e.offsetX;
         yPosOld = e.offsetY;
@@ -584,7 +595,7 @@ viewer.addEventListener('mousemove', e => {
     }
 
     if (gotBody) {
-        console.log("GOT THE BODY")
+        //console.log("GOT THE BODY")
         dragBody(targetBody, e)
     }
 
