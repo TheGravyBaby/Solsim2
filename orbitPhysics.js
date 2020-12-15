@@ -256,6 +256,7 @@ function moveBodies(body_array) {
     var allForces = sumForces(body_array);
 
     for (let i = 0; i < body_array.length; i++) {
+        //console.log(allForces[i].Fx, allForces[i].Fy, allForces[i].Fz) 
         updatePosition(allForces[i].Fx, allForces[i].Fy, allForces[i].Fz, body_array[i], granularity)      
     }   
 }
@@ -282,6 +283,8 @@ function calculateForce(body1, body2) {
         Fx =            Fmag * Math.cos(theta),
         Fy =            Fmag * Math.sin(theta),
         Fz =            Fmag * Math.sin(phi)
+    
+
     return [Fx, Fy, Fz]
 }
 

@@ -11,7 +11,7 @@ var emptySolarSystem =
         "dx": 0,
         "dy": 0,
         "dz": 0,                                                               
-        "mass": 0,
+        "mass": 1988500 * Math.pow(10, 24),
         "lines":   []
     }
 
