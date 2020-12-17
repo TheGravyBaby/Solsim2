@@ -229,8 +229,8 @@ function startStop() {
                     startMotion(solArray)
                 }
         var t1 = performance.now()
-        var timeItTook = t1 - t0
-        console.log(timeItTook)
+        var calcTime = Math.round((t1 - t0))
+        console.log(calcTime)
 
         // using time it took metric will allow us to ajust for systems of different speeds
         if (!hasRun) {
@@ -241,7 +241,7 @@ function startStop() {
                     startMotion(solArray)
                 }
                
-            }, timeItTook * 1.5);
+            }, calcTime);
         }
      }
 }
@@ -323,11 +323,17 @@ function updatePosition(Fx, Fy, Fz, body, dt) {
     
     // this is a very crude implimentation of special relativity
     // should however prevent bodies from moving too fast, which is mostly the goal
+
     var velocityMag = Math.pow((body.dx * body.dx + body.dy * body.dy + body.dz * body.dz), .5)
         relativeMass = body.mass / Math.pow((1 - (velocityMag * velocityMag / ( 8.98755179 * Math.pow(10, 16)))) , .5),
         ddx = Fx / relativeMass,
         ddy = Fy / relativeMass;
         ddz = Fz / relativeMass;
+
+    // these don't take into account relativity
+    // ddx = Fx / body.mass,
+    // ddy = Fy / body.mass;
+    // ddz = Fz / body.mass;
 
     body.x = body.x + body.dx * dt + .5 * ddx * Math.pow(dt, 2)
     body.y = body.y + body.dy * dt + .5 * ddy * Math.pow(dt, 2)

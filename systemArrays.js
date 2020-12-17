@@ -15,6 +15,8 @@ var emptySolarSystem =
         "lines":   []
     }
 
+// these values corresond to June 4th, 2020 at noon
+// if you want to add bodies, you can use Nasa's Horizon API with that date
 
 var ourSolarSystem = [ 
     {
@@ -192,6 +194,50 @@ var ourSolarSystem = [
     },
 ];
 
+var threeBodySystem = [
+    {
+        "name": "Body1",
+            "pixelSize": 3,
+            "color": "red",
+            "x": 0,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0,
+            "dy": 0,
+            "dz": 0,                                                                
+            "mass": 3 * Math.pow(10, 24),
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body2",
+            "pixelSize": 4,
+            "color": "green",
+            "x": 30000000000,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0,
+            "dy": 0,
+            "dz": 0,                                                                
+            "mass": 4 * Math.pow(10, 24),
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body3",
+            "pixelSize": 5,
+            "color": "blue",
+            "x": 30000000000,                                                                 
+            "y": 40000000000,
+            "z": 0,
+            "dx": 0,
+            "dy": 0,
+            "dz": 0,                                                                
+            "mass": 5 * Math.pow(10, 24),
+            "lines":  []                                 
+    },
+]
+
 let userSystem1 = [JSON.parse(JSON.stringify(emptySolarSystem))];
 let userSystem2 = [JSON.parse(JSON.stringify(emptySolarSystem))];
 let userSystem3 = [JSON.parse(JSON.stringify(emptySolarSystem))];
@@ -200,6 +246,11 @@ var universeArray = [
     {
         "name": "Sol",
         "system": ourSolarSystem,
+    },
+
+    {
+        "name": "Pythagorean Three Body",
+        "system": threeBodySystem,
     },
 
     // the strange notation i believe makes a shallow copy
