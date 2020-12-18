@@ -189,7 +189,7 @@ function startStop() {
         populateTable()
        
         $('#startStop').text("START");
-        $('#startStop').css("border-color" , "rgb(12, 160, 7)");
+        $('#startStop').css("border-color" , "rgb(96, 153, 95)");
         enableFields()
        
      }
@@ -197,7 +197,7 @@ function startStop() {
      else {
        
         $('#startStop').text("STOP");
-        $('#startStop').css("border-color" , "rgb(160, 7, 7)");
+        $('#startStop').css("border-color" , "rgb(153, 95, 95)");
 
         // when we start, we dont want the user to edit these fields, only when paused
         disableFields()
