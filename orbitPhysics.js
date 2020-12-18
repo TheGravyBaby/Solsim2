@@ -12,6 +12,9 @@ var seconds = 0;
 var runOrbits = false;
 var hasRun = false;
 var newBodyIndex = 1;
+var lastBodyX;
+var lastBodyY;
+var lastBodyColor;
 
 function populateSolarSystemList() {
     $('#solarSystemlist').empty()
@@ -40,8 +43,6 @@ function changeSolarSystem() {
     populateTable() 
 }
 
-
-
 function populateBodyList() {
     $('#bodyList').empty()
 
@@ -51,7 +52,6 @@ function populateBodyList() {
             .attr("value", element.name)
             .text(element.name));
     });
-
 }
 
 function changeGranularity() {
@@ -62,7 +62,7 @@ function populateLines() {
    
     if (runOrbits) {
         for (let i = 0; i < solArray.length; i++) {
-            if (solArray[i].lines.length < 1000) {
+            if (solArray[i].lines.length < 10000) {
                 solArray[i].lines.push([solArray[i].x, solArray[i].y, solArray[i].z])
             }
             else {
@@ -145,29 +145,6 @@ function updateSystem() {
     $("#bodyList").val(name);
 }
 
-function addBody() {
-    solArray.push(
-        {
-            "name": "NewBody"+ newBodyIndex,
-            "pixelSize": 8,
-            "color": "white",
-            "x": 549200000 * Math.pow(10, 3),                                                                 
-            "y": 549200000 * Math.pow(10, 3),
-            "z": 0,
-            "dx": -9.68 * 1000,
-            "dy": 9.68 * 1000,
-            "dz": 0,                                                                
-            "mass": 5.00 * Math.pow(10, 29),
-            "lines":  []                                      
-        }
-    )
-    populateBodyList();
-    var newBodyName = "NewBody" + newBodyIndex
-    $("#bodyList").val(newBodyName)
-    newBodyIndex += 1
-    populateTable();
-    // console.log(solArray)
-}
 
 function enableFields() {
     $('#bodyName').removeAttr('disabled');
@@ -403,13 +380,37 @@ function renderObjects(body_array) {
             // Add scales to axis
             var xAxis = d3.axisBottom(x).ticks(16)
                 .tickFormat(function (d) {
-                    return d / 1000000000 +"Gm";
+                    
+                    if (scale > 10) {
+                        return d / 1000000000 +"Gm";
+                    }
+                    else  if (scale > .01) {
+                        return d / 1000000 +"Mm";
+                    }
+                    else  if (scale > .001) {
+                        return d / 1000 +"Km";
+                    }
+                    else  if (scale > .0000001) {
+                        return d  +"m";
+                    }
+         
                 });
     
     
             var yAxis = d3.axisRight(y).ticks(10)
                 .tickFormat(function (d) {
-                    return d / 1000000000 +"Gm";
+                    if (scale > 10) {
+                        return d / 1000000000 +"Gm";
+                    }
+                    else  if (scale > .01) {
+                        return d / 1000000 +"Mm";
+                    }
+                    else  if (scale > .001) {
+                        return d / 1000 +"Km";
+                    }
+                    else  if (scale > .0000001) {
+                        return d  +"m";
+                    }
                 });
     
             svg.append("g")
@@ -448,6 +449,7 @@ function renderObjects(body_array) {
         .attr("id", function(d) { return (d.name);})
         .attr("class", "planet")
 
+        // remember that y is negative on the screen axis
         if (vectorsOn) {
             var vectorLines = svg.selectAll("arrows")
             .data(body_array)
@@ -456,8 +458,8 @@ function renderObjects(body_array) {
             .attr("id", "velocityVector")
             .attr("x1", d => x(d.x))     
             .attr("y1", d => y(d.y))      
-            .attr("x2", d => x(d.x + (d.dx * 864000)))     
-            .attr("y2", d => y(d.y + (d.dy * 864000)))
+            .attr("x2", d => x(d.x) + (d.dx/300))     
+            .attr("y2", d => y(d.y) - (d.dy/300))
     
     
         var rectangles = svg.selectAll("rectangles")
@@ -466,8 +468,9 @@ function renderObjects(body_array) {
             .append("rect")
     
         // minus 3 to center the rectangle
-        rectangles.attr("x", d => x(d.x + (d.dx * 864000)) - 3)
-            .attr("y", d => y(d.y + (d.dy * 864000)) - 3)
+
+        rectangles.attr("x", d => x(d.x) + (d.dx/300) -3 )
+            .attr("y", d => y(d.y) - (d.dy/300) - 3)
             .attr("stroke", "red")
             .attr("fill", "red")
             .attr("width", 6)
@@ -502,22 +505,32 @@ function dragVector(vectorName, e) {
     var xMargin = 64;
     var yMargin = 40;
     var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
+    var x = d3.scaleLinear()
+        .domain([-mapScale - xOffset * scale * Math.pow(10, 6) , mapScale - xOffset * scale * Math.pow(10, 6)])
+        .range([xMargin, width - xMargin]);
+
+    var y = d3.scaleLinear()
+        .domain([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
+        .range([height - yMargin, yMargin]);
 
     var X = e.offsetX;
     var Y = e.offsetY;
 
-    // these are the inverse of our render scales, we want to go from pixels to meters
-    var xScale = d3.scaleLinear()
-    .domain([xMargin, width - xMargin])
-    .range([-mapScale - xOffset * scale * Math.pow(10, 6) , mapScale - xOffset * scale * Math.pow(10, 6)]);
+    // console.log("---------------------------------------------------------")
+    // console.log(X)
+    // console.log(Y)
+    
+    // console.log(x(solArray.find(item=>item.name==vectorName).x))
+    // console.log(y(solArray.find(item=>item.name==vectorName).y))
+    // console.log("xdif : " + (X + xMargin - x(solArray.find(item=>item.name==vectorName).x) ))
+    // console.log()
+    // console.log("---------------------------------------------------------")
 
-    var yScale = d3.scaleLinear()
-    .domain([height - yMargin, yMargin])
-    .range([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
+
 
     // I guess this is a good scale
-    solArray.find(item=>item.name==vectorName).dx = (xScale(X) - solArray.find(item=>item.name==vectorName).x) / (864000);
-    solArray.find(item=>item.name==vectorName).dy = (yScale(Y) - solArray.find(item=>item.name==vectorName).y) / (864000);
+    solArray.find(item=>item.name==vectorName).dx = (X  - x(solArray.find(item=>item.name==vectorName).x))*300
+    solArray.find(item=>item.name==vectorName).dy = (Y  - y(solArray.find(item=>item.name==vectorName).y))*-300;
 
     // we need to cap the vector, don't want speed of light violations
     if (solArray.find(item=>item.name==vectorName).dx > 1e6) {
@@ -561,6 +574,7 @@ function dragBody(bodyname, e) {
     solArray.find(item=>item.name==bodyname).x = xScale(X);
     solArray.find(item=>item.name==bodyname).y = yScale(Y);
 
+    $('#bodyList').val(bodyname)
     populateTable();
 }
 
@@ -572,7 +586,7 @@ viewer.addEventListener('mousedown', e => {
         //console.log(targetBody)
     }
 
-    else if ($(e.target).hasClass('vector') && !runOrbits) {
+    else if ($(e.target).hasClass('vector')) {
         gotVector = true;
         targetBody = (e.target.id).split("-")[0];
         
@@ -581,8 +595,18 @@ viewer.addEventListener('mousedown', e => {
     else {
         isPanning = true;
     }
+    
+});
 
-  });
+  
+// if we press delete, then delete the selected body
+$('html').keyup(function(e){
+    if(e.keyCode == 46) {
+        deleteBody()
+    }
+});
+
+
 
 viewer.addEventListener('mousemove', e => {
     if (isPanning && xPosOld != null) {
@@ -623,28 +647,85 @@ viewer.addEventListener('mouseup', e => {
     }
   });
 
-document.addEventListener('wheel', function(e) {
+// this will add a new body on right click, keeping parameters of an already selected body
+$('#map').bind("contextmenu",function(e){
+    
+    var width = $(window).width() * .85;
+    var height = $(window).height();
+    var xMargin = 64;
+    var yMargin = 40;
+    var mapScale = scale * Math.pow(10, 9);       //size of astronomical area, 4500 to see neptune
+
+    var X = e.offsetX;
+    var Y = e.offsetY;
+
+    // these are the inverse of our render scales, we want to go from pixels to meters
+    var xScale = d3.scaleLinear()
+        .domain([xMargin, width - xMargin])
+        .range([-mapScale - xOffset * scale * Math.pow(10, 6) , mapScale - xOffset * scale * Math.pow(10, 6)]);
+
+    var yScale = d3.scaleLinear()
+        .domain([height - yMargin, yMargin])
+        .range([.625 * -mapScale + yOffset * scale * Math.pow(10, 6), .625 * mapScale + yOffset * scale * Math.pow(10, 6)])
+
+    // first body should be white, after that, use the copy
+    var color = "white"
+    var size = 5
+    var mass = 1e29
+    
+    if (newBodyIndex != 1) {
+        color = $("#bodyColor").val()
+        size = $("#bodyRadius").val()
+        mass = $('#bodyMass').val()
+    }
+        
+    solArray.push(
+        {
+            "name": "NewBody"+ newBodyIndex,
+            "pixelSize": 5,
+            "color": color,
+            "x": xScale(X),                                                                 
+            "y": yScale(Y),
+            "z": 0,
+            "dx": 0,
+            "dy": 0,
+            "dz": 0,                                                                
+            "mass": mass,
+            "lines":  []                                      
+        }
+    )
+
+    populateBodyList()
+    
+    $('#bodyList').val("NewBody" + newBodyIndex)
+
+
+    newBodyIndex += 1
+
+    return false;
+ });
+
+viewer.addEventListener('wheel', function(e) {
+
     e.preventDefault();
     zoom(e);
 }, { passive: false });
 
+
 function zoom(e) {
 
-    // if zooming in but we're already very zoomed, go slow
-    if (e.deltaY < 0 && scale >= 22) {
-        scale =  scale - 20;
-    }
+
 
     // default zoom in
-    if (e.deltaY < 0 && scale >= 200) {
-        scale =  scale - 180;
-
+    if (e.deltaY < 0 ) {
+        scale =  scale * .8;
     }
 
     // default zoom out, can't go past scale max
     if (e.deltaY > 0 && scale <= 20100) {
-        scale =  scale + 500;
+        scale =  scale * 1.2;
     }
+
 }
 
 var focusing = false;
@@ -739,6 +820,7 @@ document.getElementById('file-selector') .addEventListener('change', function() 
 populateSolarSystemList();
 populateBodyList()
 populateTable();
+
 render = setInterval(function(){renderObjects(solArray)}, 42);
 renderLines = setInterval(function(){populateLines()}, 84);
 updateFields = setInterval(function(){dataUpdater()}, 1000);

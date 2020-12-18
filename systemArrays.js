@@ -1,3 +1,9 @@
+// this is your god now
+// grav constant is 1 for this math, requires scaling to work with my systems
+// http://three-body.ipb.ac.rs/
+
+var scaleFactor = 1e8
+var inverseGravConst = 1 / (6.67408 * Math.pow(10, -11))
 
 var emptySolarSystem =  
     {
@@ -194,8 +200,146 @@ var ourSolarSystem = [
     },
 ];
 
-var threeBodySystem = [
+
+var threeBodyFigure8= [
     {
+        // slight alterations make the pattern last longer before the limits of my simulator become apparent haha
+        "name": "Body1",
+            "pixelSize": 6,
+            "color": "red",
+            "x": -1 * scaleFactor,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.347111,
+            "dy": 0.532728,
+            "dz": 0,                                                                
+            "mass": 1 * scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body2",
+            "pixelSize": 6,
+            "color": "green",
+            "x": 1 * scaleFactor,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.347111,
+            "dy": 0.532728,
+            "dz": 0,                                                                
+            "mass": 1 * scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body3",
+            "pixelSize": 6,
+            "color": "blue",
+            "x": 0,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.347111 * -2 ,
+            "dy": 0.532728 * -2 ,
+            "dz": 0,                                                                
+            "mass": 1 * scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+]
+
+var threeBodyMoth= [
+    {
+        // slight alterations make the pattern last longer before the limits of my simulator become apparent haha
+        "name": "Body1",
+            "pixelSize": 6,
+            "color": "red",
+            "x": -1 * scaleFactor,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.439166,
+            "dy": 0.452968,
+            "dz": 0,                                                                
+            "mass": 1 * scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body2",
+            "pixelSize": 6,
+            "color": "green",
+            "x": 1 * scaleFactor,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.439166,
+            "dy": 0.452968,
+            "dz": 0,                                                                
+            "mass": 1 *scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body3",
+            "pixelSize": 6,
+            "color": "blue",
+            "x": 0,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.439166 * -2,
+            "dy": 0.452968 * -2,
+            "dz": 0,                                                                
+            "mass": 1 * scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+]
+
+//not working, bodies collide and destroy themselves
+var threeBodyButterfly= [
+    {
+        // slight alterations make the pattern last longer before the limits of my simulator become apparent haha
+        "name": "Body1",
+            "pixelSize": 6,
+            "color": "red",
+            "x": -1 * scaleFactor,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.306893,
+            "dy": 0.125507,
+            "dz": 0,                                                                
+            "mass": 1 * scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body2",
+            "pixelSize": 6,
+            "color": "green",
+            "x": 1 * scaleFactor,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.306893,
+            "dy": 0.125507,
+            "dz": 0,                                                                
+            "mass": 1 * scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body3",
+            "pixelSize": 6,
+            "color": "blue",
+            "x": 0,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0.306893 * -2,
+            "dy": 0.125507 * -2,
+            "dz": 0,                                                                
+            "mass": 1 * scaleFactor * inverseGravConst,
+            "lines":  []                                 
+    },
+]
+
+var threeBodyPythag = [
+    {
+        // slight alterations make the pattern last longer before the limits of my simulator become apparent haha
         "name": "Body1",
             "pixelSize": 3,
             "color": "red",
@@ -205,7 +349,7 @@ var threeBodySystem = [
             "dx": 0,
             "dy": 0,
             "dz": 0,                                                                
-            "mass": 3 * Math.pow(10, 24),
+            "mass": 3 * Math.pow(10, 25),
             "lines":  []                                 
     },
 
@@ -219,7 +363,7 @@ var threeBodySystem = [
             "dx": 0,
             "dy": 0,
             "dz": 0,                                                                
-            "mass": 4 * Math.pow(10, 24),
+            "mass": 4 * Math.pow(10, 25),
             "lines":  []                                 
     },
 
@@ -233,7 +377,52 @@ var threeBodySystem = [
             "dx": 0,
             "dy": 0,
             "dz": 0,                                                                
-            "mass": 5 * Math.pow(10, 24),
+            "mass": 5 * Math.pow(10, 25),
+            "lines":  []                                 
+    },
+]
+
+var threeBodyYingYang = [
+    {
+        // slight alterations make the pattern last longer before the limits of my simulator become apparent haha
+        "name": "Body1",
+            "pixelSize": 3,
+            "color": "red",
+            "x": 0,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0,
+            "dy": 0,
+            "dz": 0,                                                                
+            "mass": 3 * Math.pow(10, 25),
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body2",
+            "pixelSize": 4,
+            "color": "green",
+            "x": 30000000000,                                                                 
+            "y": 0,
+            "z": 0,
+            "dx": 0,
+            "dy": 0,
+            "dz": 0,                                                                
+            "mass": 4 * Math.pow(10, 25),
+            "lines":  []                                 
+    },
+
+    {
+        "name": "Body3",
+            "pixelSize": 5,
+            "color": "blue",
+            "x": 30000000000,                                                                 
+            "y": 40000000000,
+            "z": 0,
+            "dx": 0,
+            "dy": 0,
+            "dz": 0,                                                                
+            "mass": 5 * Math.pow(10, 25),
             "lines":  []                                 
     },
 ]
@@ -250,7 +439,22 @@ var universeArray = [
 
     {
         "name": "Pythagorean Three Body",
-        "system": threeBodySystem,
+        "system": threeBodyPythag,
+    },
+
+    {
+        "name": "Figure 8",
+        "system": threeBodyFigure8,
+    },
+
+    {
+        "name": "Moth",
+        "system": threeBodyMoth,
+    },
+
+    {
+        "name": "Butterfly",
+        "system": threeBodyButterfly,
     },
 
     // the strange notation i believe makes a shallow copy

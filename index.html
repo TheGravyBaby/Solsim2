@@ -8,8 +8,9 @@
 
 <body>
 <div id="map"></div>
+
 <div class = "sideMenu">
-     
+
     <div>
         <label for="solarSystemlist"><b>Star Systems</b></label>
         <select id="solarSystemlist" label="Solar System" class = "listBox" onchange="changeSolarSystem()"></select>
@@ -26,8 +27,9 @@
     <label for="bodyList"><b>Orbital Body</b></label>
     <select id="bodyList" label="Body List" class = "listBox" onchange="populateTable()"></select><br>
 
-    <button id="addPlanet" class="formbutton" onclick="addBody()">Add Body</button>
     <button id="removePlanet" class="formbutton" onclick="deleteBody()">Remove Body</button>
+    <button id="focusBody" class="formbutton" onclick="focusButton()">Follow Body</button>
+
     <!-- <button id="updateBody" class="formbutton" onclick="updateSystem()">Update Body</button> -->
     <br>
 
@@ -88,19 +90,18 @@
     </table>
 
     <!-- <button id="toggleGrid" class="formbutton" onclick="toggleGrid()">Toggle Grid</button> -->
-    <button id="focusBody" class="formbutton" onclick="focusButton()">Focus Body</button>
-    <button id="focusBody" class="formbutton" onclick="centerCamera()">Recenter</button>
-    <button id="toggleLines" class="formbutton" onclick="toggleLines()">Toggle Paths</button>
-    <button id="toggleVectors" class="formbutton" onclick="toggleVectors()">Toggle Vectors</button><br><br>
 
-    <button onclick="startStop()" class="formbuttonbig">Start / Stop</button><br><br>
+    <button id= "startStop" onclick="startStop()" class="formbuttonbig">Start / Stop</button><br><br>
 
     <label for="granularity"><b>Calculation Granularity</b></label><br>
     <select id="granularity" label="Granularity" class = "listBox" onchange="changeGranularity()">
+        <option value = ".000001">1 MicroSecond</option>
+        <option value = ".001">1 Milisecond</option>
         <option value = "1">1 Second</option>
         <option value = "5">5 Seconds</option>
         <option value = "30">30 Seconds</option>
         <option value = "60" selected="selected" >1 Minute</option>
+        <option value = "120" >2 Minute</option>
         <option value = "300">5 Minutes</option>
         <option value = "1800">30 Minutes</option>
         <option value = "3600">1 Hour</option>
@@ -111,7 +112,27 @@
 
     <div id="counter"></div>
 
+ 
+
+    <button id="centerCamera" class="spaceButton" onclick="centerCamera()">Recenter</button>
+    <button id="toggleLines" class="spaceButton" onclick="toggleLines()">Toggle Paths</button>
+    <button id="toggleVectors" class="spaceButton" onclick="toggleVectors()">Toggle Vectors</button><br><br>
 </div>
+
+<div class="dropdown">
+    <button class="dropbtn">Instructions</button>
+    <div class="dropdown-content">
+        <p>
+            <b>Welcome to Sol Sim!</b><br>   
+            <br>Controls</br>
+            1. To add a body, right click empty space. <br> 
+            2. To move a body, select and drag. <br> 
+            3. To change velocity, toggle vectors then drag. <br>
+            4. To move camera, select empty space and drag. <br>
+            5. To zoom in and out, use the scroll wheel.<br>  
+        </p>
+    </div>
+  </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://d3js.org/d3.v5.min.js"></script>

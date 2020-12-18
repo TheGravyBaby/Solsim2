@@ -51,9 +51,14 @@ line {
     right: 0;
 }
 
+#instructions {
+    position: fixed;
+    text-align: left;
+    bottom: 5px;
+}
 
 .textbox {
-    width: 160px;
+    width: 170px;
     height: 16px;
     margin: 1px;
     resize: none;
@@ -65,10 +70,42 @@ line {
 
 .listBox {
     position: relative;
-    width: 270px;
+    width: 272px;
     border-width: 1px;
     background-color: rgb(60, 60, 60);
     color: rgb(241, 241, 241);
+}
+
+#centerCamera {
+    right : 390px;
+}
+
+#toggleLines {
+    right : 710px;
+}
+
+#toggleVectors {
+    right : 550px;
+}
+
+
+.spaceButton {
+    position: fixed;
+    bottom: 5px;
+    background-color: rgb(200, 200, 200);
+    border: 1px;
+    border-style: solid;
+    color: rgb(43, 43, 43);
+    border-radius: 2px 2px 2px 2px;
+    padding: 6px 12px;
+    text-align: center;
+    text-decoration: bold;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 150px;
+
 }
 
 .formbutton {
@@ -182,5 +219,53 @@ th, td {
     margin: 4px 2px;
     cursor: pointer;
     font-weight: bold;
-    width: 130px;
+    width: 110px;
 }
+
+#mapContainer {
+    height: 100vh;
+}
+
+/* Dropdown Button */
+.dropbtn {
+    background-color: #242424;
+    border: 1px;
+    border-style: solid;
+    color: rgb(241, 241, 241);
+    padding: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    width: 376px;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    width: 350px;
+    position: fixed;
+    bottom: 50px;
+    right: 0;
+    margin: 12px;
+    z-index: 1;
+    font-size: 20px;
+  }
+  
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #ddd;}
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {display: block;}
+  
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {background-color: rgb(70, 70, 70);}
