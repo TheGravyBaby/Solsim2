@@ -700,6 +700,40 @@ function toggleLines () {
     }
 }
 
+// https://stackoverflow.com/questions/33271555/download-json-object-as-json-file-using-jquery
+$("#downloadJSON").click(function() {
+    $("<a />", {
+      "download": "universe_array.json",
+      "href" : "data:application/json," + encodeURIComponent(JSON.stringify(universeArray))
+    }).appendTo("body")
+    .click(function() {
+       $(this).remove()
+    })[0].click()
+  })
+
+// https://www.geeksforgeeks.org/how-to-read-a-local-text-file-using-javascript/
+// i am a dirty thief
+document.getElementById('file-selector') .addEventListener('change', function() { 
+    
+  var fr=new FileReader(); 
+  fr.onload=function(){ 
+      try{
+        var JSONTHING = (JSON.parse(fr.result)); 
+        universeArray = null;
+        solArray = null;
+        universeArray = JSONTHING;
+
+        populateSolarSystemList();
+        
+      }
+      catch {
+        alert("Sorry I couldn't parse that file.");
+      }
+  } 
+    
+  fr.readAsText(this.files[0]); 
+
+}) 
 
 // initializationn
 populateSolarSystemList();

@@ -62,9 +62,10 @@ line {
 }
 
 
+
 .listBox {
     position: relative;
-    width: 250px;
+    width: 270px;
     border-width: 1px;
     background-color: rgb(60, 60, 60);
     color: rgb(241, 241, 241);
@@ -146,4 +147,40 @@ th, td {
     font-size: 12px;
     color: rgb(255, 255, 255);
     text-align: right;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+}
+
+.inputfile + label {
+    cursor: pointer; /* "hand" cursor */
+    
+    display: inline-block;
+    background-color: rgb(60, 60, 60);
+    border: 1px;
+    border-style: solid;
+    color: rgb(241, 241, 241);
+    border-radius: 2px 2px 2px 2px;
+    padding: 6px 12px;
+    text-align: center;
+    text-decoration: bold;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 130px;
 }

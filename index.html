@@ -11,8 +11,15 @@
 <div class = "sideMenu">
      
     <div>
-        <label for="solarSystemlist"><b>Star System</b></label>
-        <select id="solarSystemlist" label="Solar System" class = "listBox" onchange="changeSolarSystem()"></select><br><br>
+        <label for="solarSystemlist"><b>Star Systems</b></label>
+        <select id="solarSystemlist" label="Solar System" class = "listBox" onchange="changeSolarSystem()"></select>
+        <button id="downloadJSON" class="formbutton">Download JSON</button>
+        <!-- <input type="file"  label = "Upload JSON"></input> -->
+        
+        <input type="file" name="file" id="file-selector" class="inputfile"/>
+        <label for="file-selector" >Upload JSON</label>
+
+        <br><br> 
     </div>    
     
 
