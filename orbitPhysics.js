@@ -187,13 +187,17 @@ function startStop() {
     if(runOrbits) {
         runOrbits = false;
         populateTable()
-        console.log("STOPPED")
+       
+        $('#startStop').text("START");
+        $('#startStop').css("border-color" , "rgb(12, 160, 7)");
         enableFields()
        
      }
 
      else {
-        console.log("START")
+       
+        $('#startStop').text("STOP");
+        $('#startStop').css("border-color" , "rgb(160, 7, 7)");
 
         // when we start, we dont want the user to edit these fields, only when paused
         disableFields()
@@ -207,7 +211,7 @@ function startStop() {
                 }
         var t1 = performance.now()
         var calcTime = Math.round((t1 - t0))
-        console.log(calcTime)
+        // console.log(calcTime)
 
         // using time it took metric will allow us to ajust for systems of different speeds
         if (!hasRun) {

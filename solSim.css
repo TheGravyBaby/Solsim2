@@ -130,18 +130,21 @@ line {
     border: 1px;
     border-style: solid;
     color: rgb(241, 241, 241);
-    border-color: rgb(52, 52, 52);
+    border-color: rgb(12, 160, 7);
     border-width: 2px;
     border-radius: 5px 5px 5px 5px;
     padding: 10px 18px;
     text-align: center;
     text-decoration: bold;
     display: inline-block;
-    font-size: 20px;
+    font-size: 30px;
     margin: 4px 2px;
     cursor: pointer;
     font-weight: bold;
+    width: 240px;
+    outline: none;
 }
+
 p {
     font-family: Arial;
     font-size: 14px;
