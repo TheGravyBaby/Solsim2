@@ -183,6 +183,12 @@ function deleteBody() {
     populateBodyList();
 }
 
+function resetPaths() {
+    solArray.forEach(element => {
+        element.lines = [];
+    });
+}
+
 function startStop() {
     if(runOrbits) {
         runOrbits = false;

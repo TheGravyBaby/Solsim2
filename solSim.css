@@ -88,6 +88,10 @@ line {
     right : 550px;
 }
 
+#clearPaths {
+    right : 870px;
+}
+
 
 .spaceButton {
     position: fixed;

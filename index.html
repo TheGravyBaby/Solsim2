@@ -116,7 +116,8 @@
 
     <button id="centerCamera" class="spaceButton" onclick="centerCamera()">Recenter</button>
     <button id="toggleLines" class="spaceButton" onclick="toggleLines()">Toggle Paths</button>
-    <button id="toggleVectors" class="spaceButton" onclick="toggleVectors()">Toggle Vectors</button><br><br>
+    <button id="toggleVectors" class="spaceButton" onclick="toggleVectors()">Toggle Vectors</button>
+    <button id="clearPaths" class="spaceButton" onclick="resetPaths()">Reset Paths</button>
 </div>
 
 <div class="dropdown">
@@ -129,7 +130,13 @@
             2. To move a body, select and drag. <br> 
             3. To change velocity, toggle vectors then drag. <br>
             4. To move camera, select empty space and drag. <br>
-            5. To zoom in and out, use the scroll wheel.<br>  
+            5. To zoom in and out, use the scroll wheel.<br><br>
+            
+            You can also select a body from the dropdown list, and edit it's properties manually using the text fields. 
+
+            There are multiple pre built systems you can select from the 'Star Systems' drop down. If you make one you particularly like, 
+            you can download or upload the JSON file containing all the body data.  
+
         </p>
     </div>
   </div>
