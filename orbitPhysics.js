@@ -38,7 +38,10 @@ function changeSolarSystem() {
     solArray = universeArray[systemIndex].system;
 
     $('#bodyList option')[0].selected = true;
-    runOrbits = false;
+    
+    // this will ensure that we always end in the stop state
+    runOrbits = true;
+    startStop()
     seconds = 0;
     populateTable() 
 }
