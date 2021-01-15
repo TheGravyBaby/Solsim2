@@ -258,13 +258,15 @@ th, td {
   /* Dropdown Content (Hidden by Default) */
   .dropdown-content {
     display: none;
-    width: 350px;
+    width: 320px;
     position: fixed;
-    bottom: 50px;
+    bottom: 45px;
     right: 0;
-    margin: 12px;
+    margin: 20px;
+    
     z-index: 1;
     font-size: 20px;
+    background-color:rgb(70, 70, 70);
   }
   
   
