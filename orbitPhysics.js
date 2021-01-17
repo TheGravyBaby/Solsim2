@@ -834,6 +834,6 @@ populateSolarSystemList();
 populateBodyList()
 populateTable();
 
-render = setInterval(function(){renderObjects(solArray)}, 42);
+render = setInterval(function(){renderObjects(solArray)}, 21);
 renderLines = setInterval(function(){populateLines()}, 84);
 updateFields = setInterval(function(){dataUpdater()}, 1000);
