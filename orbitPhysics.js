@@ -1,11 +1,3 @@
-// 1. make fields take proper values and change properly
-// 2. update UI to be a bit more intuitive and good looking
-// 3. add save states, should be able to load a solar system json object
-// 4. add draggabiliy, no one wants to fiddle fuck with numbers
-// 5. add arrows for speed
-// 6. add planet sizability
-// 7. add collisions 
-
 var scale = 4500;
 var granularity = 60;
 var seconds = 0;

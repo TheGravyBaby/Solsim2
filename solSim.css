@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(0, 0, 5);
     background-size: cover;
     padding:0;
     margin:0;
@@ -21,7 +21,7 @@ text {
 }
 
 line {
-    stroke: rgb(31, 31, 31);
+    stroke: rgb(31, 31, 40);
 }
 
 #velocityVector {
@@ -45,7 +45,7 @@ line {
     position: fixed;
     width: 320px;
     height: 100%;
-    background-color: rgb(70, 70, 70);
+    background-color: rgb(50, 50, 55);
     text-align: center;
     padding: 28px;
     right: 0;
@@ -62,7 +62,7 @@ line {
     height: 16px;
     margin: 1px;
     resize: none;
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(50, 50, 55);
     color: rgb(241, 241, 241);
 }
 
@@ -72,7 +72,7 @@ line {
     position: relative;
     width: 272px;
     border-width: 1px;
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(50, 50, 55);
     color: rgb(241, 241, 241);
 }
 
@@ -114,7 +114,7 @@ line {
 
 .formbutton {
     display: inline-block;
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(50, 50, 55);
     border: 1px;
     border-style: solid;
     color: rgb(241, 241, 241);
@@ -130,7 +130,7 @@ line {
 }
 
 .formbuttonbig {
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(50, 50, 55);
     border: 1px;
     border-style: solid;
     color: rgb(241, 241, 241);
@@ -215,7 +215,7 @@ th, td {
     cursor: pointer; /* "hand" cursor */
     
     display: inline-block;
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(50, 50, 55);
     border: 1px;
     border-style: solid;
     color: rgb(241, 241, 241);
@@ -267,7 +267,7 @@ th, td {
     
     z-index: 1;
     font-size: 20px;
-    background-color:rgb(70, 70, 70);
+    background-color: rgb(50, 50, 55);
   }
   
   
@@ -278,4 +278,4 @@ th, td {
   .dropdown:hover .dropdown-content {display: block;}
   
   /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {background-color: rgb(70, 70, 70);}
+  .dropdown:hover .dropbtn {background-color: rgb(60, 60, 70);}
