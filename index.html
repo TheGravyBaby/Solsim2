@@ -25,13 +25,8 @@
     
 
     <label for="bodyList"><b>Orbital Body</b></label>
-    <select id="bodyList" label="Body List" class = "listBox" onchange="populateTable()"></select><br>
+    <select id="bodyList" label="Body List" class = "listBox" onchange="populateTable(); focusButton()"></select><br>
 
-    <button id="removePlanet" class="formbutton" onclick="deleteBody()">Remove Body</button>
-    <button id="focusBody" class="formbutton" onclick="focusButton()">Follow Body</button>
-
-    <!-- <button id="updateBody" class="formbutton" onclick="updateSystem()">Update Body</button> -->
-    <br>
 
     <table id="propertiesTable">
         <tr>
@@ -127,14 +122,15 @@
         <p>
             <b>Welcome to Sol Sim!</b><br>   
             <br>Controls</br>
-            1. To add a body, right click empty space. <br> 
-            2. To move a body, select and drag. <br> 
-            3. To change velocity, toggle vectors then drag. <br>
-            4. To move camera, select empty space and drag. <br>
-            5. To zoom in and out, use the scroll wheel.<br><br>
-            
-            You can also select a body from the dropdown list, and edit it's properties manually using the text fields. 
-            <br><br>
+            1. To add a body, right click empty space and a body will appear.<br> <br> 
+            2. To select a body, click on it or use the "Orbital Body" dropdown. <br> <br> 
+            3. Once selected you can edit the properties of the body on the right side (pause first) <br> <br> 
+            4. To delete a body, press the Del key after a body has been selected<br><br> 
+            5. To easily change the position of a body, simply drag the body where you want it to be on the map. <br><br> 
+            6. To change the velocity of a body, enable velocity vectors and drag the vector. Or use the property grid on the right. <br><br> 
+            7. To delete a body, select the body from the d
+            8. You can move around the map by dragging empty space, and by using the scroll wheel to zoom. <br><br><br> 
+
             There are multiple pre built systems you can select from the 'Star Systems' drop down. If you make one you particularly like, 
             you can download or upload the JSON file containing all the body data.  
 
