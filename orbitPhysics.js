@@ -461,6 +461,8 @@ function renderObjects(body_array) {
         .attr("fill", function(d) { return (d.color);})
         .attr("id", function(d) { return (d.name);})
         .attr("class", "planet")
+        .style("box-shadow", "0px 0px 8px 5px white")
+
 
         // remember that y is negative on the screen axis
         if (vectorsOn) {
@@ -587,16 +589,20 @@ function dragBody(bodyname, e) {
     solArray.find(item=>item.name==bodyname).x = xScale(X);
     solArray.find(item=>item.name==bodyname).y = yScale(Y);
 
-    $('#bodyList').val(bodyname)
-    populateTable();
+  
 }
 
 viewer.addEventListener('mousedown', e => {
     
+    focusing = false;
+
     if ($(e.target).hasClass('planet')) {
         gotBody = true;
         targetBody = e.target.id;
         //console.log(targetBody)
+
+        $('#bodyList').val(targetBody)
+        populateTable();
     }
 
     else if ($(e.target).hasClass('vector')) {
@@ -742,14 +748,10 @@ function zoom(e) {
 }
 
 var focusing = false;
+
 function focusButton() {
-    if (!focusing) {
         focusing = true;
         focusBody()
-    }
-    else {
-        focusing = false;
-    }
 }
 
 function focusBody() {
@@ -837,3 +839,5 @@ populateTable();
 render = setInterval(function(){renderObjects(solArray)}, 21);
 renderLines = setInterval(function(){populateLines()}, 84);
 updateFields = setInterval(function(){dataUpdater()}, 1000);
+
+startStop();

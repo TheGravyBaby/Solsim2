@@ -178,6 +178,7 @@ table {
 .planet {
     cursor: grab;
     z-index:-1;
+    
 }
 
 .vector {
