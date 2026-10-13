@@ -62,7 +62,7 @@ function populateLines() {
             }
             else {
                 solArray[i].lines.shift()
-                solArray[i].lines.push([solArray[i].x, solArray[i].y, , solArray[i].z])
+                solArray[i].lines.push([solArray[i].x, solArray[i].y, solArray[i].z])
             }
         }
         //console.log(solArray)
@@ -267,15 +267,17 @@ function calculateForce(body1, body2) {
         xdif =          x2 - x1,
         ydif =          y2 - y1,
         zdif =          z2 - z1,
-        distance2d =    Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2)), .5),
-        distance =      Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2) + Math.pow((zdif), 2)), .5),
-        theta =         Math.atan2(ydif, xdif),
-        phi =           Math.atan2(zdif, distance2d),
+        d =      Math.pow((Math.pow((xdif), 2) + Math.pow((ydif), 2) + Math.pow((zdif), 2)), .5),
         GravConst =     6.67408 * Math.pow(10, -11),
-        Fmag =          m1 * m2 * GravConst / (distance * distance),
-        Fx =            Fmag * Math.cos(theta),
-        Fy =            Fmag * Math.sin(theta),
-        Fz =            Fmag * Math.sin(phi)
+        Fmag =          m1 * m2 * GravConst / (d * d),
+        
+        // the below values, when each squared and added become the radius r
+        // they are components of the total force
+        // r = (xdif, ydif, zdif)
+        // so the unit vector of r = r / d = ( xdif/d , ydif/d , zdif/d )
+        Fx =            Fmag * (xdif /d)
+        Fy =            Fmag * (ydif /d),
+        Fz =            Fmag * (zdif /d)
     
 
     return [Fx, Fy, Fz]
@@ -303,19 +305,19 @@ return universalForceArray;
 
 function updatePosition(Fx, Fy, Fz, body, dt) {
     
+    // removed in 2026 cause this is donky nuts
     // this is a very crude implimentation of special relativity
     // should however prevent bodies from moving too fast, which is mostly the goal
-
-    var velocityMag = Math.pow((body.dx * body.dx + body.dy * body.dy + body.dz * body.dz), .5)
-        relativeMass = body.mass / Math.pow((1 - (velocityMag * velocityMag / ( 8.98755179 * Math.pow(10, 16)))) , .5),
-        ddx = Fx / relativeMass,
-        ddy = Fy / relativeMass;
-        ddz = Fz / relativeMass;
+    // var velocityMag = Math.pow((body.dx * body.dx + body.dy * body.dy + body.dz * body.dz), .5)
+        // relativeMass = body.mass / Math.pow((1 - (velocityMag * velocityMag / ( 8.98755179 * Math.pow(10, 16)))) , .5),
+        // ddx = Fx / relativeMass,
+        // ddy = Fy / relativeMass;
+        // ddz = Fz / relativeMass;
 
     // these don't take into account relativity
-    // ddx = Fx / body.mass,
-    // ddy = Fy / body.mass;
-    // ddz = Fz / body.mass;
+    let ddx = Fx / body.mass,
+    ddy = Fy / body.mass,
+    ddz = Fz / body.mass;
 
     body.x = body.x + body.dx * dt + .5 * ddx * Math.pow(dt, 2)
     body.y = body.y + body.dy * dt + .5 * ddy * Math.pow(dt, 2)
